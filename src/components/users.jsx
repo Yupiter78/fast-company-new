@@ -15,8 +15,8 @@ const Users = () => {
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Professions</th>
                         <th scope="col">Qualities</th>
+                        <th scope="col">Professions</th>
                         <th scope="col">CompletedMeetings</th>
                         <th scope="col">Rate</th>
                         <th scope="col">Button</th>
@@ -28,7 +28,6 @@ const Users = () => {
                             <tr key={user._id}>
                                 <th scope="row">{i + 1}</th>
                                 <td>{user.name}</td>
-                                <td>{user.profession.name}</td>
                                 <td>
                                     {user.qualities.map((quality) => {
                                         return (
@@ -39,6 +38,7 @@ const Users = () => {
                                         );
                                     })}
                                 </td>
+                                <td>{user.profession.name}</td>
                                 <td>{user.completedMeetings}</td>
                                 <td>{user.rate}</td>
                                 <td>
