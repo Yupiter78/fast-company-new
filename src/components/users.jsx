@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import api from "../api";
 import Badge from "./badge";
+import Phrases from "./phrases";
 
 const Users = () => {
     const [users, setUsers] = useState(api.users.fetchAll());
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
+
     return (
         <>
             <h1>Users</h1>
+            <Phrases users={users} />
             <table className="table">
                 <thead>
                     <tr>
