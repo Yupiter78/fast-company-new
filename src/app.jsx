@@ -8,10 +8,25 @@ const App = () => {
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
+
+    const handleChangeBookmark = (userId) => {
+        setUsers(
+            users.map((user) => {
+                if (user._id === userId) {
+                    user.status = !user.status;
+                }
+                return user;
+            })
+        );
+    };
     return (
         <div>
             <SearchStatus length={users.length} />
-            <Users users={users} onDelete={handleDelete} />
+            <Users
+                users={users}
+                onDelete={handleDelete}
+                onChangeBookmark={handleChangeBookmark}
+            />
         </div>
     );
 };

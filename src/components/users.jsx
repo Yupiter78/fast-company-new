@@ -1,10 +1,7 @@
 import React from "react";
-import SearchStatus from "./searchStatus";
-import Qualities from "./qualities";
-import Bookmark from "./bookmark";
 import User from "./user";
 
-const Users = ({ users, onDelete }) => {
+const Users = ({ users, ...rest }) => {
     return (
         <>
             {users.length > 0 && (
@@ -26,9 +23,9 @@ const Users = ({ users, onDelete }) => {
                             return (
                                 <User
                                     key={user._id}
-                                    {...user}
                                     index={i}
-                                    onDelete={onDelete}
+                                    {...user}
+                                    {...rest}
                                 />
                             );
                         })}

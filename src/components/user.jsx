@@ -10,8 +10,9 @@ const User = ({
     profession,
     completedMeetings,
     rate,
+    onDelete,
     status = false,
-    onDelete
+    ...rest
 }) => {
     return (
         <tr>
@@ -24,7 +25,7 @@ const User = ({
             <td>{completedMeetings}</td>
             <td>{rate}</td>
             <td>
-                <Bookmark status={status} />
+                <Bookmark {...rest} id={_id} status={status} />
             </td>
             <td>
                 <button

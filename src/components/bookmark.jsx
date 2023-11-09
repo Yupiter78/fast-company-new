@@ -1,14 +1,8 @@
 import React from "react";
 
-const Bookmark = ({ status }) => {
-    const handleChangeBookmark = () => {
-        console.log("status:", status);
-        status = !status;
-        console.log("status_2:", status);
-        return status;
-    };
+const Bookmark = ({ id, status, onChangeBookmark }) => {
     return (
-        <button onClick={handleChangeBookmark}>
+        <button onClick={() => onChangeBookmark(id)}>
             <i className={`bi bi-bookmark${status ? "-fill" : ""}`}></i>
         </button>
     );
