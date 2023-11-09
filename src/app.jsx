@@ -9,11 +9,12 @@ const App = () => {
         setUsers(users.filter((user) => user._id !== userId));
     };
 
-    const handleChangeBookmark = (userId) => {
+    const handleToggleBookmark = (userId) => {
         setUsers(
             users.map((user) => {
                 if (user._id === userId) {
-                    user.status = !user.status;
+                    return { ...user, status: !user.status };
+                    // user.status = !user.status;
                 }
                 return user;
             })
@@ -25,7 +26,7 @@ const App = () => {
             <Users
                 users={users}
                 onDelete={handleDelete}
-                onChangeBookmark={handleChangeBookmark}
+                onToggleBookmark={handleToggleBookmark}
             />
         </div>
     );
