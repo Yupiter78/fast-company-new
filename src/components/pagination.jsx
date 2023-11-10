@@ -1,22 +1,34 @@
 import React from "react";
 
-const Pagination = ({ pageSize, totalUsers, currentPages, onPageChange }) => {
-    const totalPagesCount = Math.ceil(totalUsers / pageSize);
+const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalUsers / pageSize);
     return (
         <>
-            {totalPagesCount > 1 && (
+            {totalPages > 1 && (
                 <nav aria-label="...">
                     <ul className="pagination">
-                        {Array.from({ length: totalPagesCount }, (_, i) => {
+                        <li
+                            className={`page-item ${
+                                currentPage === 1 ? "disabled" : ""
+                            } `}
+                        >
+                            <a
+                                className="page-link"
+                                onClick={() => onPageChange(currentPage - 1)}
+                            >
+                                Previous
+                            </a>
+                        </li>
+                        {Array.from({ length: totalPages }, (_, i) => {
                             const number = ++i;
                             return (
                                 <li
                                     key={number}
                                     className={`page-item ${
-                                        currentPages === number ? "active" : ""
+                                        currentPage === number ? "active" : ""
                                     }`}
                                     aria-current={
-                                        currentPages === number ? "page" : null
+                                        currentPage === number ? "page" : null
                                     }
                                 >
                                     <a
@@ -28,6 +40,18 @@ const Pagination = ({ pageSize, totalUsers, currentPages, onPageChange }) => {
                                 </li>
                             );
                         })}
+                        <li
+                            className={`page-item${
+                                currentPage === totalPages ? " disabled" : ""
+                            }`}
+                        >
+                            <a
+                                className="page-link"
+                                onClick={() => onPageChange(currentPage + 1)}
+                            >
+                                Next
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             )}

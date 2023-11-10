@@ -45,7 +45,7 @@ const Users = ({ users, ...rest }) => {
             <Pagination
                 pageSize={PAGE_SIZE}
                 totalUsers={count}
-                currentPages={currentPage}
+                currentPage={currentPage}
                 onPageChange={handlePageChange}
             />
         </>
