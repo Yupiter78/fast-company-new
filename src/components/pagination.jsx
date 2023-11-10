@@ -1,30 +1,37 @@
 import React from "react";
 
-const Pagination = ({ currentPages, totalPages, onPagination }) => {
+const Pagination = ({ pageSize, totalUsers, currentPages, onPageChange }) => {
+    const totalPagesCount = Math.ceil(totalUsers / pageSize);
     return (
-        <nav aria-label="...">
-            <ul className="pagination">
-                {Array.from({ length: totalPages }, (_, i) => {
-                    const number = i + 1;
-                    return (
-                        <li
-                            key={number}
-                            className={`page-item ${
-                                currentPages === number ? "active" : ""
-                            }`}
-                            aria-current={
-                                currentPages === number ? "page" : null
-                            }
-                            onClick={() => onPagination(number)}
-                        >
-                            <a className="page-link" href="/">
-                                {number}
-                            </a>
-                        </li>
-                    );
-                })}
-            </ul>
-        </nav>
+        <>
+            {totalPagesCount > 1 && (
+                <nav aria-label="...">
+                    <ul className="pagination">
+                        {Array.from({ length: totalPagesCount }, (_, i) => {
+                            const number = ++i;
+                            return (
+                                <li
+                                    key={number}
+                                    className={`page-item ${
+                                        currentPages === number ? "active" : ""
+                                    }`}
+                                    aria-current={
+                                        currentPages === number ? "page" : null
+                                    }
+                                >
+                                    <a
+                                        className="page-link"
+                                        onClick={() => onPageChange(number)}
+                                    >
+                                        {number}
+                                    </a>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
+            )}
+        </>
     );
 };
 

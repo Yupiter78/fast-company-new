@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import User from "./user";
+import Pagination from "./pagination";
 
 const Users = ({ users, ...rest }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const PAGE_SIZE = 4;
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = PAGE_SIZE * currentPage;
+    const handlePageChange = (numberPage) => {
+        setCurrentPage(numberPage);
+    };
+    const newUsers = users.slice(startIndex, endIndex);
+    const count = users.length;
     return (
         <>
-            {users.length > 0 && (
+            {count > 0 && (
                 <table className="table">
                     <thead>
                         <tr>
@@ -19,7 +29,7 @@ const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, i) => {
+                        {newUsers.map((user, i) => {
                             return (
                                 <User
                                     key={user._id}
@@ -32,6 +42,12 @@ const Users = ({ users, ...rest }) => {
                     </tbody>
                 </table>
             )}
+            <Pagination
+                pageSize={PAGE_SIZE}
+                totalUsers={count}
+                currentPages={currentPage}
+                onPageChange={handlePageChange}
+            />
         </>
     );
 };
