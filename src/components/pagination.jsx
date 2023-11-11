@@ -1,7 +1,9 @@
 import React from "react";
+import _ from "lodash";
 
 const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
     const totalPages = Math.ceil(totalUsers / pageSize);
+    const pages = _.range(1, totalPages + 1);
     return (
         <>
             {totalPages > 1 && (
@@ -19,23 +21,22 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                                 Previous
                             </a>
                         </li>
-                        {Array.from({ length: totalPages }, (_, i) => {
-                            const number = ++i;
+                        {pages.map((page) => {
                             return (
                                 <li
-                                    key={number}
+                                    key={page}
                                     className={`page-item ${
-                                        currentPage === number ? "active" : ""
+                                        currentPage === page ? "active" : ""
                                     }`}
                                     aria-current={
-                                        currentPage === number ? "page" : null
+                                        currentPage === page ? "page" : null
                                     }
                                 >
                                     <a
                                         className="page-link"
-                                        onClick={() => onPageChange(number)}
+                                        onClick={() => onPageChange(page)}
                                     >
-                                        {number}
+                                        {page}
                                     </a>
                                 </li>
                             );
