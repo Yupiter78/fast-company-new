@@ -1,5 +1,5 @@
 import React from "react";
-import Quality from "./quality";
+import PropTypes from "prop-types";
 
 const SearchStatus = ({ length }) => {
     const handlePhrases = (length) => {
@@ -33,6 +33,10 @@ const SearchStatus = ({ length }) => {
             <span className={`badge m-2 bg-${color}`}>{phrase}</span>
         </h2>
     );
+};
+
+SearchStatus.propTypes = {
+    length: PropTypes.number
 };
 
 export default SearchStatus;

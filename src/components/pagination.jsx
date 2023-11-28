@@ -16,7 +16,7 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                             } `}
                         >
                             <a
-                                className="page-link"
+                                className="page-link btn"
                                 onClick={() => onPageChange(currentPage - 1)}
                             >
                                 Previous
@@ -32,9 +32,10 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                                     aria-current={
                                         currentPage === page ? "page" : null
                                     }
+                                    style={{ cursor: "pointer" }}
                                 >
                                     <a
-                                        className="page-link"
+                                        className="page-link btn"
                                         onClick={() => onPageChange(page)}
                                     >
                                         {page}
@@ -48,7 +49,7 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                             }`}
                         >
                             <a
-                                className="page-link"
+                                className="page-link btn"
                                 onClick={() => onPageChange(currentPage + 1)}
                             >
                                 Next

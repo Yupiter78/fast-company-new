@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import User from "./user";
 import Pagination from "./pagination";
+import ListGroup from "./listGroup";
+import api from "../api";
+import PropTypes from "prop-types";
 
 const Users = ({ users, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [professions, setProfessions] = useState(api.professions.fetchAll());
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
@@ -12,8 +16,20 @@ const Users = ({ users, ...rest }) => {
     };
     const newUsers = users.slice(startIndex, endIndex);
     const count = users.length;
+
+    const handleSelectedProfessions = (params) => {
+        console.log(params);
+    };
+
+    useEffect(() => {
+        professions.then((data) => setProfessions(data));
+    }, []);
     return (
         <>
+            <ListGroup
+                items={professions}
+                onSelectedProfessions={handleSelectedProfessions}
+            />
             {count > 0 && (
                 <table className="table">
                     <thead>
@@ -50,6 +66,10 @@ const Users = ({ users, ...rest }) => {
             />
         </>
     );
+};
+
+Users.propTypes = {
+    users: PropTypes.array
 };
 
 export default Users;
