@@ -5,31 +5,45 @@ import ListGroup from "./listGroup";
 import api from "../api";
 import PropTypes from "prop-types";
 
-const Users = ({ users, ...rest }) => {
+const Users = ({ users, onProfessionSelect, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState(api.professions.fetchAll());
+    const [professions, setProfessions] = useState(null);
+    const [selectedProf, setSelectedProf] = useState(null);
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
     const handlePageChange = (numberPage) => {
         setCurrentPage(numberPage);
     };
-    const newUsers = users.slice(startIndex, endIndex);
-    const count = users.length;
 
-    const handleSelectedProfessions = (params) => {
-        console.log(params);
+    const handleProfessionSelect = (profObj) => {
+        console.log(profObj);
+
+        setSelectedProf(profObj);
+    };
+
+    const usersFiltered = selectedProf
+        ? users.filter(({ profession }) => profession === selectedProf)
+        : users;
+    const usersSlice = usersFiltered.slice(startIndex, endIndex);
+    const count = users.length;
+    const handleClearFilter = () => {
+        setSelectedProf(null);
     };
 
     useEffect(() => {
-        professions.then((data) => setProfessions(data));
+        api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
     return (
         <>
-            <ListGroup
-                items={professions}
-                onSelectedProfessions={handleSelectedProfessions}
-            />
+            {professions && (
+                <ListGroup
+                    items={professions}
+                    selectedItem={selectedProf}
+                    onProfessionSelect={handleProfessionSelect}
+                    onClearFilter={handleClearFilter}
+                />
+            )}
             {count > 0 && (
                 <table className="table">
                     <thead>
@@ -45,7 +59,7 @@ const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {newUsers.map((user, i) => {
+                        {usersSlice.map((user, i) => {
                             return (
                                 <User
                                     key={user._id}
@@ -69,7 +83,8 @@ const Users = ({ users, ...rest }) => {
 };
 
 Users.propTypes = {
-    users: PropTypes.array
+    users: PropTypes.array,
+    onProfessionSelect: PropTypes.func
 };
 
 export default Users;

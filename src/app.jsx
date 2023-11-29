@@ -13,7 +13,12 @@ const App = () => {
     const handleToggleBookmark = (userId) => {
         setUsers(
             users.map((user) =>
-                user._id === userId ? { ...user, status: !user.status } : user
+                user._id === userId
+                    ? {
+                          ...user,
+                          status: !user.status
+                      }
+                    : user
             )
         );
         // user.status = !user.status;

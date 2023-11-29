@@ -1,32 +1,56 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ListGroup = ({ items, onSelectedProfessions }) => {
+const ListGroup = ({
+    items,
+    selectedItem,
+    onProfessionSelect,
+    onClearFilter,
+    valueProp,
+    contentProp
+}) => {
     console.log(items);
 
     return (
         <>
-            {items && (
-                <ul
-                    className="list-group"
-                    onClick={() => onSelectedProfessions(items)}
-                >
-                    {Object.values(items).map(({ name, _id }) => {
-                        return (
-                            <li key={_id} className="list-group-item">
-                                {name}
-                            </li>
-                        );
-                    })}
-                </ul>
-            )}
+            <ul className="list-group">
+                {Object.keys(items).map((key) => {
+                    return (
+                        <li
+                            key={items[key][valueProp]}
+                            className={`list-group-item ${
+                                selectedItem === items[key] ? "active" : ""
+                            }`}
+                            onClick={() => onProfessionSelect(items[key])}
+                            role="button"
+                        >
+                            {items[key][contentProp]}
+                        </li>
+                    );
+                })}
+            </ul>
+            <button
+                className="btn btn-primary btn-sm ms-2 mt-2"
+                onClick={onClearFilter}
+            >
+                CLEAR
+            </button>
         </>
     );
 };
 
+ListGroup.defaultProps = {
+    valueProp: "_id",
+    contentProp: "name"
+};
+
 ListGroup.propTypes = {
     items: PropTypes.object,
-    onSelectedProfessions: PropTypes.func
+    selectedItem: PropTypes.object,
+    onProfessionSelect: PropTypes.func,
+    onClearFilter: PropTypes.func,
+    valueProp: PropTypes.string,
+    contentProp: PropTypes.string
 };
 
 export default ListGroup;
