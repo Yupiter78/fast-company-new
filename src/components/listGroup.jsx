@@ -9,8 +9,6 @@ const ListGroup = ({
     valueProp,
     contentProp
 }) => {
-    console.log("List-group_items:", items);
-
     return (
         <>
             <table className="table table-hover border">
