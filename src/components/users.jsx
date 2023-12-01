@@ -35,6 +35,10 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf]);
     return (
         <>
             <div className="d-flex justify-content-center">

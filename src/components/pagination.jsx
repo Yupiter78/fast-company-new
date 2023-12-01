@@ -10,14 +10,18 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
             {totalPages > 1 && (
                 <nav aria-label="...">
                     <ul className="pagination">
-                        <li className="page-item">
-                            <a
-                                className="page-link btn"
-                                onClick={() => onPageChange(currentPage - 1)}
-                            >
-                                Previous
-                            </a>
-                        </li>
+                        {currentPage > 1 && (
+                            <li className="page-item">
+                                <a
+                                    className="page-link btn"
+                                    onClick={() =>
+                                        onPageChange(currentPage - 1)
+                                    }
+                                >
+                                    Previous
+                                </a>
+                            </li>
+                        )}
                         {pages.map((page) => {
                             return (
                                 <li
@@ -39,18 +43,18 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                                 </li>
                             );
                         })}
-                        <li
-                            className={`page-item${
-                                currentPage === totalPages ? " disabled" : ""
-                            }`}
-                        >
-                            <a
-                                className="page-link btn"
-                                onClick={() => onPageChange(currentPage + 1)}
-                            >
-                                Next
-                            </a>
-                        </li>
+                        {currentPage < totalPages && (
+                            <li className="page-item">
+                                <a
+                                    className="page-link btn"
+                                    onClick={() =>
+                                        onPageChange(currentPage + 1)
+                                    }
+                                >
+                                    Next
+                                </a>
+                            </li>
+                        )}
                     </ul>
                 </nav>
             )}

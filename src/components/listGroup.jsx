@@ -13,7 +13,7 @@ const ListGroup = ({
 
     return (
         <>
-            <table className="table border">
+            <table className="table table-hover border">
                 <thead>
                     <tr>
                         <th scope="col">Profession</th>
@@ -23,12 +23,21 @@ const ListGroup = ({
                     {Object.keys(items).map((key) => {
                         return (
                             <tr key={items[key][valueProp]}>
-                                <td>
+                                <td
+                                    className={`ms-2 ${
+                                        selectedItem === items[key]
+                                            ? "table-primary"
+                                            : ""
+                                    }`}
+                                    onClick={() =>
+                                        onProfessionSelect(items[key])
+                                    }
+                                >
                                     <button
-                                        className="btn btn-sm btn-secondary ms-2"
-                                        onClick={() =>
-                                            onProfessionSelect(items[key])
-                                        }
+                                        className="btn btn-sm"
+                                        style={{
+                                            borderColor: "transparent"
+                                        }}
                                     >
                                         {items[key][contentProp]}
                                     </button>
@@ -37,13 +46,11 @@ const ListGroup = ({
                         );
                     })}
                     <tr>
-                        <td>
-                            <button
-                                className="btn btn-primary btn-sm ms-2"
-                                onClick={onClearFilter}
-                            >
-                                CLEAR
-                            </button>
+                        <td
+                            className="bg-primary text-light text-center ms-2"
+                            onClick={onClearFilter}
+                        >
+                            CLEAR
                         </td>
                     </tr>
                 </tbody>
