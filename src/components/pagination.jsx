@@ -10,11 +10,7 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
             {totalPages > 1 && (
                 <nav aria-label="...">
                     <ul className="pagination">
-                        <li
-                            className={`page-item ${
-                                currentPage === 1 ? "disabled" : ""
-                            } `}
-                        >
+                        <li className="page-item">
                             <a
                                 className="page-link btn"
                                 onClick={() => onPageChange(currentPage - 1)}

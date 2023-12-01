@@ -30,7 +30,7 @@ const SearchStatus = ({ length }) => {
     const { color, phrase } = { ...handlePhrases(length) };
     return (
         <h2>
-            <span className={`badge m-2 bg-${color}`}>{phrase}</span>
+            <span className={`badge m-5 bg-${color}`}>{phrase}</span>
         </h2>
     );
 };

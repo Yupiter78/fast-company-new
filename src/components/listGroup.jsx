@@ -13,28 +13,41 @@ const ListGroup = ({
 
     return (
         <>
-            <ul className="list-group">
-                {Object.keys(items).map((key) => {
-                    return (
-                        <li
-                            key={items[key][valueProp]}
-                            className={`list-group-item ${
-                                selectedItem === items[key] ? "active" : ""
-                            }`}
-                            onClick={() => onProfessionSelect(items[key])}
-                            role="button"
-                        >
-                            {items[key][contentProp]}
-                        </li>
-                    );
-                })}
-            </ul>
-            <button
-                className="btn btn-primary btn-sm ms-2 mt-2"
-                onClick={onClearFilter}
-            >
-                CLEAR
-            </button>
+            <table className="table border">
+                <thead>
+                    <tr>
+                        <th scope="col">Profession</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.keys(items).map((key) => {
+                        return (
+                            <tr key={items[key][valueProp]}>
+                                <td>
+                                    <button
+                                        className="btn btn-sm btn-secondary ms-2"
+                                        onClick={() =>
+                                            onProfessionSelect(items[key])
+                                        }
+                                    >
+                                        {items[key][contentProp]}
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                    <tr>
+                        <td>
+                            <button
+                                className="btn btn-primary btn-sm ms-2"
+                                onClick={onClearFilter}
+                            >
+                                CLEAR
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </>
     );
 };

@@ -4,6 +4,7 @@ import Pagination from "./pagination";
 import ListGroup from "./listGroup";
 import api from "../api";
 import PropTypes from "prop-types";
+import SearchStatus from "./searchStatus";
 
 const Users = ({ users, onProfessionSelect, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +27,7 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
         ? users.filter(({ profession }) => profession === selectedProf)
         : users;
     const usersSlice = usersFiltered.slice(startIndex, endIndex);
-    const count = users.length;
+    const count = usersFiltered.length;
     const handleClearFilter = () => {
         setSelectedProf(null);
     };
@@ -36,48 +37,61 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     }, []);
     return (
         <>
-            {professions && (
-                <ListGroup
-                    items={professions}
-                    selectedItem={selectedProf}
-                    onProfessionSelect={handleProfessionSelect}
-                    onClearFilter={handleClearFilter}
+            <div className="d-flex justify-content-center">
+                <SearchStatus length={count} />
+            </div>
+
+            <div className="row justify-content-center">
+                {professions && (
+                    <div className="col-1 ms-2">
+                        <ListGroup
+                            items={professions}
+                            selectedItem={selectedProf}
+                            onProfessionSelect={handleProfessionSelect}
+                            onClearFilter={handleClearFilter}
+                        />
+                    </div>
+                )}
+                {count > 0 && (
+                    <div className="col-9 me-2">
+                        <table className="table border">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Qualities</th>
+                                    <th scope="col">Professions</th>
+                                    <th scope="col">CompletedMeetings</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col">Favorites</th>
+                                    <th scope="col">Button</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {usersSlice.map((user, i) => {
+                                    return (
+                                        <User
+                                            key={user._id}
+                                            index={i}
+                                            {...user}
+                                            {...rest}
+                                        />
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+
+            <div className="d-flex justify-content-center">
+                <Pagination
+                    pageSize={PAGE_SIZE}
+                    totalUsers={count}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
                 />
-            )}
-            {count > 0 && (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Qualities</th>
-                            <th scope="col">Professions</th>
-                            <th scope="col">CompletedMeetings</th>
-                            <th scope="col">Rate</th>
-                            <th scope="col">Favorites</th>
-                            <th scope="col">Button</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {usersSlice.map((user, i) => {
-                            return (
-                                <User
-                                    key={user._id}
-                                    index={i}
-                                    {...user}
-                                    {...rest}
-                                />
-                            );
-                        })}
-                    </tbody>
-                </table>
-            )}
-            <Pagination
-                pageSize={PAGE_SIZE}
-                totalUsers={count}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
+            </div>
         </>
     );
 };
