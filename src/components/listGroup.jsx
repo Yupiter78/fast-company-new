@@ -9,7 +9,7 @@ const ListGroup = ({
     valueProp,
     contentProp
 }) => {
-    console.log(items);
+    console.log("List-group_items:", items);
 
     return (
         <>
@@ -65,7 +65,7 @@ ListGroup.defaultProps = {
 };
 
 ListGroup.propTypes = {
-    items: PropTypes.object,
+    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     selectedItem: PropTypes.object,
     onProfessionSelect: PropTypes.func,
     onClearFilter: PropTypes.func,

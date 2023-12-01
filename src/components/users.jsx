@@ -18,13 +18,15 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     };
 
     const handleProfessionSelect = (profObj) => {
-        console.log(profObj);
-
+        console.log("GL_ITEM:", profObj);
         setSelectedProf(profObj);
     };
 
     const usersFiltered = selectedProf
-        ? users.filter(({ profession }) => profession === selectedProf)
+        ? users.filter(
+              ({ profession }) =>
+                  JSON.stringify(profession) === JSON.stringify(selectedProf)
+          )
         : users;
     const usersSlice = usersFiltered.slice(startIndex, endIndex);
     const count = usersFiltered.length;
@@ -33,7 +35,10 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     };
 
     useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
+        api.professions.fetchAll().then((data) => {
+            console.log("DATA:", data);
+            setProfessions(data);
+        });
     }, []);
 
     useEffect(() => {
