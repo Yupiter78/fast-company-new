@@ -1,5 +1,5 @@
 import React from "react";
-import Quality from "./quality";
+import Quality from "./Quality";
 import PropTypes from "prop-types";
 
 const Qualities = ({ qualities }) => {

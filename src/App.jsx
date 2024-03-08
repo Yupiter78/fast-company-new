@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Users from "./components/users";
+import Users from "./components/Users";
 import api from "./api";
 
 const App = () => {

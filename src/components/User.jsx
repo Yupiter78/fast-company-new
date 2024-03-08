@@ -1,6 +1,6 @@
 import React from "react";
-import Qualities from "./qualities";
-import Bookmark from "./bookmark";
+import Qualities from "./Qualities";
+import Bookmark from "./Bookmark";
 import PropTypes from "prop-types";
 
 const User = ({
