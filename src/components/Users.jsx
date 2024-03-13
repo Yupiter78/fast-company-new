@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import User from "./User";
 import PropTypes from "prop-types";
+import Pagination from "./Pagination";
+import { paginate } from "../utils/paginate";
 
 const Users = ({ users, ...rest }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const PAGE_SIZE = 4;
+    const usersSlice = paginate(users, currentPage, PAGE_SIZE);
+    console.log("usersSlice: ", usersSlice);
+    const count = usersSlice.length;
+    const pageCount = Math.ceil(users.length / PAGE_SIZE);
+
+    const handleChangePage = (page) => {
+        setCurrentPage(page);
+    };
+
     return (
-        <>
-            {users.length > 0 && (
+        count > 0 && (
+            <>
                 <table className="table">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Имя</th>
                             <th scope="col">Качества</th>
                             <th scope="col">Провфессия</th>
@@ -19,17 +34,23 @@ const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, i) => (
+                        {usersSlice.map((user, i) => (
                             <User
                                 key={user._id}
                                 index={i}
-                                {...{ ...user, ...rest }}
+                                {...user}
+                                {...rest}
                             />
                         ))}
                     </tbody>
                 </table>
-            )}
-        </>
+                <Pagination
+                    pageCount={pageCount}
+                    currentPage={currentPage}
+                    onChangePage={handleChangePage}
+                />
+            </>
+        )
     );
 };
 
