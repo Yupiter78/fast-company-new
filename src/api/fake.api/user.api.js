@@ -1,4 +1,4 @@
-import { professionsObject as professions } from "./professions";
+import { professions } from "./professions";
 
 const qualities = {
     tedious: {
