@@ -1,111 +1,109 @@
-import React, { useState } from "react";
-import User from "./User";
-import PropTypes from "prop-types";
-import Pagination from "./Pagination";
-import { paginate } from "../utils/paginate";
-import GroupList from "./GroupList";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
+import User from "./User";
+import Pagination from "./Pagination";
+import GroupList from "./GroupList";
+import api from "../api";
+import PropTypes from "prop-types";
 import SearchStatus from "./SearchStatus";
 
-const Users = ({ users, professions, ...rest }) => {
+const Users = ({ users, onProfessionSelect, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedProf, setSelectedProf] = useState({});
-    console.log("users: ", users);
-
+    const [professions, setProfessions] = useState(null);
+    const [selectedProf, setSelectedProf] = useState(null);
     const PAGE_SIZE = 4;
-    const handleChangePage = (page) => {
-        setCurrentPage(page);
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = PAGE_SIZE * currentPage;
+    const handlePageChange = (numberPage) => {
+        setCurrentPage(numberPage);
     };
 
-    const handleProfessionSelect = (item) => {
-        setSelectedProf(item);
+    const handleProfessionSelect = (profObj) => {
+        setSelectedProf(profObj);
     };
 
-    const filterUsers = (usersList, filterProf) => {
-        return usersList.filter((user) => {
-            return user.profession === filterProf;
-        });
-    };
-
-    const handleClearFilter = () => {
-        setSelectedProf({});
-    };
-
-    const filteredUsers = !_.isEmpty(selectedProf)
-        ? filterUsers(users, selectedProf)
+    const usersFiltered = selectedProf
+        ? users.filter(({ profession }) => _.isEqual(profession, selectedProf))
         : users;
+    const usersSlice = usersFiltered.slice(startIndex, endIndex);
+    const count = usersFiltered.length;
+    const handleClearFilter = () => {
+        setSelectedProf(null);
+    };
 
-    console.log("filteredUsers: ", filteredUsers);
-    const count = filteredUsers.length;
-    const usersSlice = paginate(filteredUsers, currentPage, PAGE_SIZE);
-    const pageCount = Math.ceil(filteredUsers.length / PAGE_SIZE);
-    console.log("count: ", count);
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => {
+            setProfessions(data);
+        });
+    }, []);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf]);
     return (
-        <div className="d-flex flex-column">
+        <>
             <div className="d-flex justify-content-center">
                 <SearchStatus length={count} />
             </div>
-            <div className="col-10 justify-content-center">
-                <div className="d-flex">
-                    {professions && (
-                        <div className="d-flex flex-column">
-                            <GroupList
-                                items={professions}
-                                selectedItems={selectedProf}
-                                onItemSelect={handleProfessionSelect}
-                            />
-                            <button
-                                className="btn btn-secondary mx-2"
-                                onClick={handleClearFilter}
-                            >
-                                Clear
-                            </button>
-                        </div>
-                    )}
 
-                    {count > 0 && (
-                        <table className="table">
+            <div className="row justify-content-center">
+                {professions && (
+                    <div className="col-1 ms-2">
+                        <GroupList
+                            items={professions}
+                            selectedItem={selectedProf}
+                            onProfessionSelect={handleProfessionSelect}
+                            onClearFilter={handleClearFilter}
+                        />
+                    </div>
+                )}
+                {count > 0 && (
+                    <div className="col-9 me-2">
+                        <table className="table border">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Имя</th>
-                                    <th scope="col">Качества</th>
-                                    <th scope="col">Профессия</th>
-                                    <th scope="col">Встретился, раз</th>
-                                    <th scope="col">Оценка</th>
-                                    <th scope="col">Избранное</th>
-                                    <th />
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Qualities</th>
+                                    <th scope="col">Professions</th>
+                                    <th scope="col">CompletedMeetings</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col">Favorites</th>
+                                    <th scope="col">Button</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {usersSlice.map((user, i) => (
-                                    <User
-                                        key={user._id}
-                                        index={i}
-                                        {...user}
-                                        {...rest}
-                                    />
-                                ))}
+                                {usersSlice.map((user, i) => {
+                                    return (
+                                        <User
+                                            key={user._id}
+                                            index={i}
+                                            {...user}
+                                            {...rest}
+                                        />
+                                    );
+                                })}
                             </tbody>
                         </table>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
-            <div className="d-flex justify-content-center mt-3">
+
+            <div className="d-flex justify-content-center">
                 <Pagination
-                    pageCount={pageCount}
+                    pageSize={PAGE_SIZE}
+                    totalUsers={count}
                     currentPage={currentPage}
-                    onPageChange={handleChangePage}
+                    onPageChange={handlePageChange}
                 />
             </div>
-        </div>
+        </>
     );
 };
 
 Users.propTypes = {
     users: PropTypes.array,
-    professions: PropTypes.object
+    onProfessionSelect: PropTypes.func
 };
 
 export default Users;

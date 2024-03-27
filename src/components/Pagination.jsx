@@ -1,69 +1,72 @@
 import React from "react";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
-const Pagination = ({ pageCount, currentPage, onPageChange }) => {
-    const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-
-    const handlePage = (page, direction, pageCount) => {
-        const newPage = {
-            next: (page % pageCount) + 1,
-            prev: ((page - 2 + pageCount) % pageCount) + 1
-        }[direction];
-
-        newPage
-            ? onPageChange(newPage)
-            : console.error("Error: Invalid direction provided");
-    };
-
-    if (pageCount === 1) return null;
+const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalUsers / pageSize);
+    const pages = _.range(1, totalPages + 1);
     return (
-        <nav aria-label="...">
-            <ul className="pagination">
-                <li className="page-item">
-                    <a
-                        className="page-link"
-                        onClick={() =>
-                            handlePage(currentPage, "prev", pageCount)
-                        }
-                    >
-                        Previous
-                    </a>
-                </li>
-                {pages.map((page) => (
-                    <li
-                        key={`page_${page}`}
-                        className={`page-item ${
-                            page === currentPage ? "active" : ""
-                        }`}
-                        aria-current={page === currentPage ? "page" : ""}
-                    >
-                        <a
-                            className="page-link"
-                            onClick={() => onPageChange(page)}
-                        >
-                            {page}
-                        </a>
-                    </li>
-                ))}
-                <li className="page-item">
-                    <a
-                        className="page-link"
-                        onClick={() =>
-                            handlePage(currentPage, "next", pageCount)
-                        }
-                    >
-                        Next
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <>
+            {totalPages > 1 && (
+                <nav aria-label="...">
+                    <ul className="pagination">
+                        {currentPage > 1 && (
+                            <li className="page-item">
+                                <a
+                                    className="page-link btn"
+                                    onClick={() =>
+                                        onPageChange(currentPage - 1)
+                                    }
+                                >
+                                    Previous
+                                </a>
+                            </li>
+                        )}
+                        {pages.map((page) => {
+                            return (
+                                <li
+                                    key={page}
+                                    className={`page-item ${
+                                        currentPage === page ? "active" : ""
+                                    }`}
+                                    aria-current={
+                                        currentPage === page ? "page" : null
+                                    }
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <a
+                                        className="page-link btn"
+                                        onClick={() => onPageChange(page)}
+                                    >
+                                        {page}
+                                    </a>
+                                </li>
+                            );
+                        })}
+                        {currentPage < totalPages && (
+                            <li className="page-item">
+                                <a
+                                    className="page-link btn"
+                                    onClick={() =>
+                                        onPageChange(currentPage + 1)
+                                    }
+                                >
+                                    Next
+                                </a>
+                            </li>
+                        )}
+                    </ul>
+                </nav>
+            )}
+        </>
     );
 };
 
 Pagination.propTypes = {
-    pageCount: PropTypes.number,
-    currentPage: PropTypes.number,
-    onPageChange: PropTypes.func
+    pageSize: PropTypes.number.isRequired,
+    totalUsers: PropTypes.number.isRequired,
+    currentPage: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired
 };
 
 export default Pagination;

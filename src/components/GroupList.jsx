@@ -3,46 +3,73 @@ import PropTypes from "prop-types";
 
 const GroupList = ({
     items,
-    valueProperty,
-    contentProperty,
-    selectedItems,
-    onItemSelect
+    selectedItem,
+    onProfessionSelect,
+    onClearFilter,
+    valueProp,
+    contentProp
 }) => {
-    const isActive = (item, selectObj) => item === selectObj;
     return (
-        items && (
-            <ul className="list-group">
-                {Object.keys(items).map((key) => (
-                    <li
-                        key={items[key][valueProperty]}
-                        role="button"
-                        className={`list-group-item ${
-                            isActive(items[key], selectedItems) ? "active" : ""
-                        }`}
-                        aria-current={
-                            isActive(items[key], selectedItems) ? "true" : ""
-                        }
-                        onClick={() => onItemSelect(items[key])}
-                    >
-                        {items[key][contentProperty]}
-                    </li>
-                ))}
-            </ul>
-        )
+        <>
+            <table className="table table-hover border">
+                <thead>
+                    <tr>
+                        <th scope="col">Profession</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.keys(items).map((key) => {
+                        return (
+                            <tr key={items[key][valueProp]}>
+                                <td
+                                    className={`ms-2 ${
+                                        selectedItem === items[key]
+                                            ? "table-primary"
+                                            : ""
+                                    }`}
+                                    onClick={() =>
+                                        onProfessionSelect(items[key])
+                                    }
+                                >
+                                    <button
+                                        className="btn btn-sm"
+                                        style={{
+                                            borderColor: "transparent"
+                                        }}
+                                    >
+                                        {items[key][contentProp]}
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                    <tr>
+                        <td
+                            className="bg-primary text-light text-center ms-2"
+                            role="button"
+                            onClick={onClearFilter}
+                        >
+                            CLEAR
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </>
     );
 };
 
 GroupList.defaultProps = {
-    valueProperty: "_id",
-    contentProperty: "name"
+    valueProp: "_id",
+    contentProp: "name"
 };
 
 GroupList.propTypes = {
-    items: PropTypes.object,
-    valueProperty: PropTypes.string.isRequired,
-    contentProperty: PropTypes.string.isRequired,
-    selectedItems: PropTypes.object,
-    onItemSelect: PropTypes.func
+    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    selectedItem: PropTypes.object,
+    onProfessionSelect: PropTypes.func,
+    onClearFilter: PropTypes.func,
+    valueProp: PropTypes.string,
+    contentProp: PropTypes.string
 };
 
 export default GroupList;

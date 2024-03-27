@@ -4,19 +4,9 @@ import api from "./api";
 
 const App = () => {
     const [users, setUsers] = useState(null);
-    const [professions, setProfessions] = useState(null);
     useEffect(() => {
-        Promise.all([api.users.fetchAll(), api.professions.fetchAll()]).then(
-            ([users, professions]) => {
-                setUsers(users);
-                setProfessions(professions);
-            }
-        );
+        api.users.fetchAll().then((data) => setUsers(data));
     }, []);
-
-    useEffect(() => {
-        console.log("professions: ", professions);
-    }, [professions]);
 
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
@@ -41,7 +31,6 @@ const App = () => {
             {users && (
                 <Users
                     users={users}
-                    professions={professions}
                     onDelete={handleDelete}
                     onToggleBookmark={handleToggleBookmark}
                 />
