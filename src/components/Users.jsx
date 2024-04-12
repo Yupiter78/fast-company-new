@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-import User from "./User";
 import Pagination from "./Pagination";
 import GroupList from "./GroupList";
 import api from "../api";
 import PropTypes from "prop-types";
 import SearchStatus from "./SearchStatus";
+import Table from "./Table/Table";
 
 const Users = ({ users, onProfessionSelect, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState(null);
     const [selectedProf, setSelectedProf] = useState(null);
+    const [sortBy, setSortBy] = useState({
+        iter: "name",
+        order: "asc"
+    });
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
@@ -25,10 +29,16 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     const usersFiltered = selectedProf
         ? users.filter(({ profession }) => _.isEqual(profession, selectedProf))
         : users;
-    const usersSlice = usersFiltered.slice(startIndex, endIndex);
+
+    const sortedUsers = _.orderBy(usersFiltered, [sortBy.iter], [sortBy.order]);
+    const usersSlice = sortedUsers.slice(startIndex, endIndex);
     const count = usersFiltered.length;
     const handleClearFilter = () => {
         setSelectedProf(null);
+    };
+
+    const handleSort = (item) => {
+        setSortBy(item);
     };
 
     useEffect(() => {
@@ -40,6 +50,7 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
+
     return (
         <>
             <div className="d-flex justify-content-center">
@@ -59,32 +70,12 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
                 )}
                 {count > 0 && (
                     <div className="col-9 me-2">
-                        <table className="table border">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Qualities</th>
-                                    <th scope="col">Professions</th>
-                                    <th scope="col">CompletedMeetings</th>
-                                    <th scope="col">Rate</th>
-                                    <th scope="col">Favorites</th>
-                                    <th scope="col">Button</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {usersSlice.map((user, i) => {
-                                    return (
-                                        <User
-                                            key={user._id}
-                                            index={i}
-                                            {...user}
-                                            {...rest}
-                                        />
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                        <Table
+                            users={usersSlice}
+                            onSort={handleSort}
+                            selectedSort={sortBy}
+                            {...rest}
+                        />
                     </div>
                 )}
             </div>
