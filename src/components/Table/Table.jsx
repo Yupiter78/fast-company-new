@@ -36,7 +36,7 @@ const Table = ({ users, ...rest }) => {
 
     return (
         <table className="table border">
-            <TableHead {...{ columns }} {...rest} />
+            <TableHead {...{ columns, ...rest }} />
             <tbody>
                 {users.map((user, i) => {
                     return (

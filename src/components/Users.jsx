@@ -26,13 +26,13 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
         setSelectedProf(profObj);
     };
 
-    const usersFiltered = selectedProf
+    const filteredUsers = selectedProf
         ? users.filter(({ profession }) => _.isEqual(profession, selectedProf))
         : users;
 
-    const sortedUsers = _.orderBy(usersFiltered, [sortBy.iter], [sortBy.order]);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
     const usersSlice = sortedUsers.slice(startIndex, endIndex);
-    const count = usersFiltered.length;
+    const count = filteredUsers.length;
     const handleClearFilter = () => {
         setSelectedProf(null);
     };

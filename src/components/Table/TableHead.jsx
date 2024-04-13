@@ -19,12 +19,10 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
                 {Object.keys(columns).map((column) => (
                     <th
                         key={columns[column]._id}
-                        onClick={
-                            columns[column].iter
-                                ? () => handleSort(columns[column].iter)
-                                : undefined
-                        }
-                        role={columns[column].iter ? "button" : undefined}
+                        {...(columns[column].iter && {
+                            onClick: () => handleSort(columns[column].iter)
+                        })}
+                        {...(columns[column].iter && { role: "button" })}
                     >
                         {columns[column].name}
                     </th>
@@ -35,9 +33,9 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
 };
 
 TableHead.propTypes = {
-    onSort: PropTypes.func,
-    columns: PropTypes.object,
-    selectedSort: PropTypes.object
+    onSort: PropTypes.func.isRequired,
+    columns: PropTypes.object.isRequired,
+    selectedSort: PropTypes.object.isRequired
 };
 
 export default TableHead;
