@@ -72,6 +72,7 @@ const Users = ({ users, onProfessionSelect, ...rest }) => {
                     <div className="col-9 me-2">
                         <Table
                             users={usersSlice}
+                            startIndex={startIndex}
                             onSort={handleSort}
                             selectedSort={sortBy}
                             {...rest}

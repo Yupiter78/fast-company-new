@@ -20,9 +20,9 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
                     <th
                         key={columns[column]._id}
                         {...(columns[column].iter && {
-                            onClick: () => handleSort(columns[column].iter)
+                            onClick: () => handleSort(columns[column].iter),
+                            role: "button"
                         })}
-                        {...(columns[column].iter && { role: "button" })}
                     >
                         {columns[column].name}
                     </th>

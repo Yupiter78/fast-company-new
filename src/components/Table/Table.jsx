@@ -3,7 +3,7 @@ import User from "../User";
 import PropTypes from "prop-types";
 import TableHead from "./TableHead";
 
-const Table = ({ users, ...rest }) => {
+const Table = ({ users, startIndex, ...rest }) => {
     const columns = {
         number: { name: "#" },
         name: {
@@ -40,7 +40,7 @@ const Table = ({ users, ...rest }) => {
             <tbody>
                 {users.map((user, i) => {
                     return (
-                        <User key={user._id} index={i} {...user} {...rest} />
+                        <User key={user._id} index={i + startIndex} {...user} {...rest} />
                     );
                 })}
             </tbody>
@@ -49,7 +49,8 @@ const Table = ({ users, ...rest }) => {
 };
 
 Table.propTypes = {
-    users: PropTypes.array
+    users: PropTypes.array,
+    startIndex: PropTypes.number
 };
 
 export default Table;
