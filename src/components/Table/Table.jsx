@@ -1,7 +1,7 @@
 import React from "react";
-import User from "../User";
 import PropTypes from "prop-types";
 import TableHead from "./TableHead";
+import TableBody from "./TableBody";
 
 const Table = ({ users, startIndex, ...rest }) => {
     const columns = {
@@ -44,18 +44,7 @@ const Table = ({ users, startIndex, ...rest }) => {
     return (
         <table className="table border">
             <TableHead {...{ columns, ...rest }} />
-            <tbody>
-                {users.map((user, i) => {
-                    return (
-                        <User
-                            key={user._id}
-                            index={i + startIndex}
-                            {...user}
-                            {...rest}
-                        />
-                    );
-                })}
-            </tbody>
+            <TableBody {...{ columns, data: users, startIndex }} />
         </table>
     );
 };
