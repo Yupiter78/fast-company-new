@@ -8,11 +8,12 @@ const TableBody = ({ data, columns, startIndex }) => {
             {data.map((item, index) => (
                 <tr key={item._id}>
                     <th scope="row">{index + 1 + startIndex}</th>
-                    {Object.keys(columns).map(
-                        (column) =>
-                            column !== "number" && (
-                                <td key={column}>
-                                    {_.get(item, columns[column].iter)}
+                    {Object.entries(columns).map(
+                        ([key, value]) =>
+                            key !== "number" && (
+                                <td key={key}>
+                                    {value.iter &&
+                                        _.get(item, value.iter, "no data")}
                                 </td>
                             )
                     )}
