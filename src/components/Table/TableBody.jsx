@@ -3,6 +3,17 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 
 const TableBody = ({ data, columns, startIndex }) => {
+    const renderContent = (item, { component, iter }) => {
+        if (component) {
+            if (typeof component === "function") {
+                return component(item);
+            } else {
+                return component;
+            }
+        }
+
+        return iter && _.get(item, iter, "no data");
+    };
     return (
         <tbody>
             {data.map((item, index) => (
@@ -11,10 +22,7 @@ const TableBody = ({ data, columns, startIndex }) => {
                     {Object.entries(columns).map(
                         ([key, value]) =>
                             key !== "number" && (
-                                <td key={key}>
-                                    {value.iter &&
-                                        _.get(item, value.iter, "no data")}
-                                </td>
+                                <td key={key}>{renderContent(item, value)}</td>
                             )
                     )}
                 </tr>

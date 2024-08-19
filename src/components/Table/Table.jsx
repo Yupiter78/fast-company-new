@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
+import Bookmark from "../Bookmark";
 
-const Table = ({ users, startIndex, ...rest }) => {
+const Table = ({ users, startIndex, onToggleBookmark, onDelete, ...rest }) => {
     const columns = {
         number: { _id: 1, name: "#" },
         name: {
@@ -13,7 +14,8 @@ const Table = ({ users, startIndex, ...rest }) => {
         },
         qualities: {
             _id: 3,
-            name: "Qualities"
+            name: "Qualities",
+            component: "Qualities"
         },
         profession: {
             _id: 4,
@@ -33,11 +35,27 @@ const Table = ({ users, startIndex, ...rest }) => {
         favorites: {
             _id: 7,
             iter: "status",
-            name: "Favorites"
+            name: "Favorites",
+            component: ({ status, _id }) => (
+                <Bookmark
+                    status={status}
+                    onClick={() => onToggleBookmark(_id)}
+                />
+            )
         },
         delete: {
             _id: 8,
-            name: "Delete"
+            name: "Delete",
+            component: ({ _id }) => (
+                <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => {
+                        onDelete(_id);
+                    }}
+                >
+                    delete
+                </button>
+            )
         }
     };
 
@@ -51,7 +69,9 @@ const Table = ({ users, startIndex, ...rest }) => {
 
 Table.propTypes = {
     users: PropTypes.array,
-    startIndex: PropTypes.number
+    startIndex: PropTypes.number,
+    onToggleBookmark: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
 
 export default Table;
