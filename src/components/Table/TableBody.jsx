@@ -4,15 +4,9 @@ import _ from "lodash";
 
 const TableBody = ({ data, columns, startIndex }) => {
     const renderContent = (item, { component, iter }) => {
-        if (component) {
-            if (typeof component === "function") {
-                return component(item);
-            } else {
-                return component;
-            }
-        }
-
-        return iter && _.get(item, iter, "no data");
+        return component && component === "function"
+            ? component(item)
+            : component || (iter && _.get(item, iter, "no data"));
     };
     return (
         <tbody>
