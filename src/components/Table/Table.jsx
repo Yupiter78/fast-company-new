@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import Bookmark from "../Bookmark";
+import QualitiesList from "../QualitiesList";
 
 const Table = ({ users, startIndex, onToggleBookmark, onDelete, ...rest }) => {
     const columns = {
@@ -15,7 +16,7 @@ const Table = ({ users, startIndex, onToggleBookmark, onDelete, ...rest }) => {
         qualities: {
             _id: 3,
             name: "Qualities",
-            component: "Qualities"
+            component: ({ qualities }) => <QualitiesList {...{ qualities }} />
         },
         profession: {
             _id: 4,

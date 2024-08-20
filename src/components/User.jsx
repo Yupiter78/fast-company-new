@@ -1,5 +1,5 @@
 import React from "react";
-import Qualities from "./Qualities";
+import QualitiesList from "./QualitiesList";
 import Bookmark from "./Bookmark";
 import PropTypes from "prop-types";
 
@@ -20,7 +20,7 @@ const User = ({
             <th scope="row">{index + 1}</th>
             <td>{name}</td>
             <td>
-                <Qualities qualities={qualities} />
+                <QualitiesList qualities={qualities} />
             </td>
             <td>{profession.name}</td>
             <td>{completedMeetings}</td>
