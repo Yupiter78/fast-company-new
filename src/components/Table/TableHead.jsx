@@ -20,20 +20,26 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
     return (
         <thead>
             <tr>
-                {Object.keys(columns).map((column) => {
-                    const { _id, iter, name } = columns[column];
-                    return (
-                        <th
-                            key={_id}
-                            {...(iter && {
-                                onClick: () => handleSort(iter),
-                                role: "button"
-                            })}
-                        >
-                            {name}
-                        </th>
-                    );
-                })}
+                {Object.values(columns).map(({ _id, iter, name }) => (
+                    <th
+                        key={_id}
+                        {...(iter && {
+                            onClick: () => handleSort(iter),
+                            role: "button"
+                        })}
+                    >
+                        {name}{" "}
+                        {iter === selectedSort.iter && (
+                            <i
+                                className={`bi bi-caret-${
+                                    selectedSort.order === "asc"
+                                        ? "up-fill"
+                                        : "down-fill"
+                                }`}
+                            ></i>
+                        )}
+                    </th>
+                ))}
             </tr>
         </thead>
     );
