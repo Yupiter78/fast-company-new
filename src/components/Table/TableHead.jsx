@@ -17,6 +17,18 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
         [onSort, selectedSort]
     );
 
+    const renderSortArrow = (selectedSort, iter) => {
+        return (
+            iter === selectedSort.iter && (
+                <i
+                    className={`bi bi-caret-${
+                        selectedSort.order === "asc" ? "up-fill" : "down-fill"
+                    }`}
+                ></i>
+            )
+        );
+    };
+
     return (
         <thead>
             <tr>
@@ -28,16 +40,8 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
                             role: "button"
                         })}
                     >
-                        {name}{" "}
-                        {iter === selectedSort.iter && (
-                            <i
-                                className={`bi bi-caret-${
-                                    selectedSort.order === "asc"
-                                        ? "up-fill"
-                                        : "down-fill"
-                                }`}
-                            ></i>
-                        )}
+                        {name}
+                        {renderSortArrow(selectedSort, iter)}
                     </th>
                 ))}
             </tr>
