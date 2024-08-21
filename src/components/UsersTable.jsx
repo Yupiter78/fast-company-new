@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import Table from "./Table/Table";
 import QualitiesList from "./QualitiesList";
 import Bookmark from "./Bookmark";
+import TableHead from "./Table/TableHead";
+import TableBody from "./Table/TableBody";
 
 const UsersTable = ({
     users,
@@ -12,7 +14,6 @@ const UsersTable = ({
     onDelete,
     ...rest
 }) => {
-    console.log("rest_U: ", rest);
     const columns = {
         number: { _id: 1, name: "#" },
         name: {
@@ -67,14 +68,10 @@ const UsersTable = ({
         }
     };
     return (
-        <Table
-            {...{
-                data: users,
-                startIndex,
-                columns,
-                ...rest
-            }}
-        />
+        <Table {...{ data: users, startIndex, columns, ...rest }}>
+            <TableHead {...{ columns, ...rest }} />
+            <TableBody {...{ columns, data: users, startIndex }} />
+        </Table>
     );
 };
 
