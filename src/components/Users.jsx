@@ -25,18 +25,15 @@ const Users = () => {
     }, []);
 
     const handleDelete = (userId) => {
-        setUsers(users.filter((user) => user._id !== userId));
+        setUsers((prevUsers) =>
+            prevUsers.filter((user) => user._id !== userId)
+        );
     };
 
     const handleToggleBookmark = (userId) => {
-        setUsers(
-            users.map((user) =>
-                user._id === userId
-                    ? {
-                          ...user,
-                          status: !user.status
-                      }
-                    : user
+        setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+                user._id === userId ? { ...user, status: !user.status } : user
             )
         );
     };
