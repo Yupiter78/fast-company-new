@@ -11,19 +11,25 @@ const User = ({ id }) => {
         });
     }, []);
     return user ? (
-        <div className="ms-5 mt-3">
-            <p>
-                Name: <span className="fs-4 fw-bold">{user.name}</span>
-            </p>
-            <p>
-                Profession:{" "}
-                <span className="fw-bold">{user.profession.name}</span>
-            </p>
-            <p>
-                Qualities: <QualitiesList qualities={user.qualities} />
-            </p>
-            <p>CompletedMeetings: {user.completedMeetings}</p>
-            <p>Rate: {user.rate}</p>
+        <div className="card ms-5 mt-3" style={{ width: "18rem" }}>
+            <div className="card-body">
+                <h5 className="card-title">{user.name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                    Profession: {user.profession.name}
+                </h6>
+                <p className="card-text">
+                    <strong>Qualities:</strong>{" "}
+                    <QualitiesList qualities={user.qualities} />
+                    <br />
+                    <strong>Completed Meetings:</strong>{" "}
+                    {user.completedMeetings}
+                    <br />
+                    <strong>Rate:</strong> {user.rate}
+                    <br />
+                    <strong>Status:</strong>{" "}
+                    {user.status ? "Active" : "Inactive"}
+                </p>
+            </div>
         </div>
     ) : (
         <div>Loading...</div>
