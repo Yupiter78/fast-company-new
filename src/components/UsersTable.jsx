@@ -6,6 +6,7 @@ import QualitiesList from "./QualitiesList";
 import Bookmark from "./Bookmark";
 import TableHead from "./Table/TableHead";
 import TableBody from "./Table/TableBody";
+import { Link } from "react-router-dom";
 
 const UsersTable = ({
     users,
@@ -19,7 +20,10 @@ const UsersTable = ({
         name: {
             _id: 2,
             iter: "name",
-            name: "Name"
+            name: "Name",
+            component: ({ _id, name }) => (
+                <Link to={`/users/${_id}`}>{name}</Link>
+            )
         },
         qualities: {
             _id: 3,
