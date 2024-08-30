@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "../api";
 import QualitiesList from "./QualitiesList";
@@ -7,18 +8,28 @@ const User = ({ id }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const history = useHistory();
+
+    const handleReturnAllUsers = useCallback(() => {
+        history.push("/users");
+    }, []);
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (isMounted) => {
             try {
                 const userData = await api.users.getUserById(id);
-                setUser(userData);
+                isMounted && setUser(userData);
             } catch (e) {
                 setError(e);
             } finally {
-                setLoading(false);
+                isMounted && setLoading(false);
             }
         };
-        fetchData();
+        let isMounted = true;
+
+        fetchData(isMounted);
+        return () => {
+            isMounted = false;
+        };
     }, [id]);
 
     if (loading) {
@@ -43,24 +54,33 @@ const User = ({ id }) => {
     } = user;
 
     return user ? (
-        <div className="card ms-5 mt-3" style={{ width: "18rem" }}>
-            <div className="card-body">
-                <h5 className="card-title">{name}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">
-                    Profession: {professionName}
-                </h6>
-                <p className="card-text">
-                    <strong>Qualities:</strong>{" "}
-                    <QualitiesList qualities={qualities} />
-                    <br />
-                    <strong>Completed Meetings:</strong> {completedMeetings}
-                    <br />
-                    <strong>Rate:</strong> {rate}
-                    <br />
-                    <strong>Status:</strong> {status ? "Active" : "Inactive"}
-                </p>
+        <>
+            <div className="card ms-5 mt-3" style={{ width: "18rem" }}>
+                <div className="card-body">
+                    <h5 className="card-title">{name}</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Profession: {professionName}
+                    </h6>
+                    <p className="card-text">
+                        <strong>Qualities:</strong>{" "}
+                        <QualitiesList qualities={qualities} />
+                        <br />
+                        <strong>Completed Meetings:</strong> {completedMeetings}
+                        <br />
+                        <strong>Rate:</strong> {rate}
+                        <br />
+                        <strong>Status:</strong>{" "}
+                        {status ? "Active" : "Inactive"}
+                    </p>
+                </div>
+                <button
+                    className="btn btn-primary mx-5 mb-3"
+                    onClick={handleReturnAllUsers}
+                >
+                    All users
+                </button>
             </div>
-        </div>
+        </>
     ) : (
         <div>Loading...</div>
     );
