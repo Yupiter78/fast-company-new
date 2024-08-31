@@ -16,23 +16,20 @@ const UsersList = () => {
         iter: "name",
         order: "asc"
     });
-
+    const [isMounted, setIsMounted] = useState(true);
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
 
     useEffect(() => {
-        const abortController = new AbortController();
         const fetchData = async () => {
             try {
-                const data = await api.users.fetchAll({
-                    signal: abortController.signal
-                });
-                if (!abortController.signal.aborted) {
+                const data = await api.users.fetchAll();
+                if (isMounted) {
                     setUsers(data);
                 }
             } catch (e) {
-                if (!abortController.signal.aborted) {
+                if (isMounted) {
                     console.log("Error fetching users: ", e);
                 }
             }
@@ -41,7 +38,7 @@ const UsersList = () => {
         fetchData();
 
         return () => {
-            abortController.abort();
+            setIsMounted(false);
         };
     }, []);
 
