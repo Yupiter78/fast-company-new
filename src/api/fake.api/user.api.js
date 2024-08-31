@@ -144,17 +144,45 @@ const users = [
     }
 ];
 
-function fetchAll() {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(users), 2000);
-    });
-}
+const fetchAll = async ({ signal }) => {
+    return new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+            reject(new Error("Timeout"));
+        }, 5000);
 
-function getUserById(id) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(users.find((user) => user._id === id)), 1000);
+        signal.addEventListener("abort", () => {
+            clearTimeout(timeoutId);
+            reject(new Error("Request aborted"));
+        });
+
+        setTimeout(() => {
+            resolve(users);
+        }, 1000);
     });
-}
+};
+
+const getUserById = async (userId, { signal }) => {
+    return new Promise((resolve, reject) => {
+        const user = users.find((user) => user._id === userId);
+
+        if (user) {
+            const timeoutId = setTimeout(() => {
+                reject(new Error("Timeout"));
+            }, 5000);
+
+            signal.addEventListener("abort", () => {
+                clearTimeout(timeoutId);
+                reject(new Error("Request aborted"));
+            });
+
+            setTimeout(() => {
+                resolve(user);
+            }, 1000);
+        } else {
+            reject(new Error("User not found"));
+        }
+    });
+};
 
 export default {
     fetchAll,

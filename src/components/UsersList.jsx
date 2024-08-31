@@ -16,13 +16,44 @@ const UsersList = () => {
         iter: "name",
         order: "asc"
     });
+
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
 
     useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
+        const abortController = new AbortController();
+        const fetchData = async () => {
+            try {
+                const data = await api.users.fetchAll({
+                    signal: abortController.signal
+                });
+                if (!abortController.signal.aborted) {
+                    setUsers(data);
+                }
+            } catch (e) {
+                if (!abortController.signal.aborted) {
+                    console.log("Error fetching users: ", e);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            abortController.abort();
+        };
     }, []);
+
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => {
+            setProfessions(data);
+        });
+    }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf]);
 
     const handleDelete = (userId) => {
         setUsers((prevUsers) =>
@@ -45,16 +76,6 @@ const UsersList = () => {
     const handleProfessionSelect = (profObj) => {
         setSelectedProf(profObj);
     };
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => {
-            setProfessions(data);
-        });
-    }, []);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedProf]);
 
     const handleClearFilter = () => {
         setSelectedProf(null);
