@@ -1,19 +1,10 @@
 import React, { useState } from "react";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const handleChange = ({ target }) => {
         const { value, name } = target;
-        const setters = {
-            email: setEmail,
-            password: setPassword
-        };
-
-        const setter = setters[name];
-        if (setter) {
-            setter(value);
-        }
+        setFormData({ ...formData, [name]: value });
     };
     return (
         <form action="">
@@ -23,7 +14,7 @@ const Login = () => {
                     type="text"
                     id="email"
                     name="email"
-                    value={email}
+                    value={formData.email}
                     onChange={handleChange}
                 />
             </div>
@@ -33,7 +24,7 @@ const Login = () => {
                     type="password"
                     id="password"
                     name="password"
-                    value={password}
+                    value={formData.password}
                     onChange={handleChange}
                 />
             </div>
