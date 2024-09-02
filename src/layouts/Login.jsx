@@ -3,13 +3,14 @@ import React, { useState } from "react";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const handleChange = (type, value) => {
+    const handleChange = ({ target }) => {
+        const { value, name } = target;
         const setters = {
             email: setEmail,
             password: setPassword
         };
 
-        const setter = setters[type];
+        const setter = setters[name];
         if (setter) {
             setter(value);
         }
@@ -21,8 +22,9 @@ const Login = () => {
                 <input
                     type="text"
                     id="email"
+                    name="email"
                     value={email}
-                    onChange={(e) => handleChange("email", e.target.value)}
+                    onChange={handleChange}
                 />
             </div>
             <div>
@@ -30,8 +32,9 @@ const Login = () => {
                 <input
                     type="password"
                     id="password"
+                    name="password"
                     value={password}
-                    onChange={(e) => handleChange("password", e.target.value)}
+                    onChange={handleChange}
                 />
             </div>
         </form>
