@@ -2,9 +2,8 @@ import React, { useState } from "react";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
-    const handleChange = ({ target }) => {
-        const { value, name } = target;
-        setFormData({ ...formData, [name]: value });
+    const handleChange = ({ target: { name, value } }) => {
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
     return (
         <form action="">
