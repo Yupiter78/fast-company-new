@@ -13,20 +13,16 @@ const Login = () => {
     }, [formData]);
     const validate = () => {
         const errors = {};
-        for (const key in formData) {
-            if (Object.prototype.hasOwnProperty.call(formData, key)) {
-                if (formData[key].trim() === "") {
-                    errors[key] = `Field ${key} is required`;
-                }
-            }
-        }
+        Object.keys(formData).forEach((key) => {
+            formData[key].trim() === "" &&
+                (errors[key] = `Field ${key} is required`);
+        });
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
-        console.log("errors: ", errors);
         if (!isValid) return;
         console.log("formData: ", formData);
     };
@@ -38,6 +34,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                error={errors.email}
             />
             <TextField
                 label="Password"
@@ -45,6 +42,7 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                error={errors.password}
             />
             <button type="submit">Login</button>
         </form>
