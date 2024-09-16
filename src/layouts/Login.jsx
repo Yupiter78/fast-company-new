@@ -12,11 +12,12 @@ const Login = () => {
         validate();
     }, [formData]);
     const validate = () => {
-        const errors = {};
-        Object.keys(formData).forEach((key) => {
-            formData[key].trim() === "" &&
-                (errors[key] = `Field ${key} is required`);
-        });
+        const errors = Object.keys(formData).reduce((acc, prop) => {
+            if (formData[prop].trim() === "") {
+                acc[prop] = `Field ${prop} is required`;
+            }
+            return acc;
+        }, {});
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
