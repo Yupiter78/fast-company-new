@@ -15,21 +15,11 @@ const Login = () => {
     const validateConfig = {
         email: {
             isRequired: {
-                method: function (data) {
-                    if (data === "") {
-                        return this.message;
-                    }
-                },
                 message: "Email is required"
             }
         },
         password: {
             isRequired: {
-                method: function (data) {
-                    if (data === "") {
-                        return this.message;
-                    }
-                },
                 message: "Password is required"
             }
         }
@@ -37,14 +27,6 @@ const Login = () => {
 
     const validate = () => {
         const errors = validator(formData, validateConfig);
-        console.log("errors: ", errors);
-
-        // const errors = Object.keys(formData).reduce((acc, prop) => {
-        //     if (formData[prop].trim() === "") {
-        //         acc[prop] = `Field ${prop} is required`;
-        //     }
-        //     return acc;
-        // }, {});
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
