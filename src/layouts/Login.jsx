@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../components/TextField";
+import { validator } from "../utils/validator";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -11,13 +12,39 @@ const Login = () => {
     useEffect(() => {
         validate();
     }, [formData]);
-    const validate = () => {
-        const errors = Object.keys(formData).reduce((acc, prop) => {
-            if (formData[prop].trim() === "") {
-                acc[prop] = `Field ${prop} is required`;
+    const validateConfig = {
+        email: {
+            isRequired: {
+                method: function (data) {
+                    if (data === "") {
+                        return this.message;
+                    }
+                },
+                message: "Email is required"
             }
-            return acc;
-        }, {});
+        },
+        password: {
+            isRequired: {
+                method: function (data) {
+                    if (data === "") {
+                        return this.message;
+                    }
+                },
+                message: "Password is required"
+            }
+        }
+    };
+
+    const validate = () => {
+        const errors = validator(formData, validateConfig);
+        console.log("errors: ", errors);
+
+        // const errors = Object.keys(formData).reduce((acc, prop) => {
+        //     if (formData[prop].trim() === "") {
+        //         acc[prop] = `Field ${prop} is required`;
+        //     }
+        //     return acc;
+        // }, {});
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
