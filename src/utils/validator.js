@@ -3,6 +3,10 @@ export function validator(data, config) {
     const validate = {
         isRequired: (propData, message) => {
             if (propData.trim() === "") return message;
+        },
+        isEmail: (propData, message) => {
+            const emailRegExp = /^\S+@\S+\.\S+$/g;
+            if (!emailRegExp.test(propData)) return message;
         }
     };
 
@@ -11,7 +15,9 @@ export function validator(data, config) {
             config[fieldName]
         )) {
             const errorMessage = validate[validateMethod]?.(content, message);
-            if (errorMessage) errors[fieldName] = errorMessage;
+            if (errorMessage && !errors[fieldName]) {
+                errors[fieldName] = errorMessage;
+            }
         }
     }
 
