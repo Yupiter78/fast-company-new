@@ -30,6 +30,10 @@ const Login = () => {
             },
             hasDigit: {
                 message: "Password must contain at least one digit"
+            },
+            minLength: {
+                message: "Password must contain at least 8 characters",
+                value: 8
             }
         }
     };

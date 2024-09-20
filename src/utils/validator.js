@@ -15,6 +15,9 @@ export function validator(data, config) {
         hasDigit: (data, { message }) => {
             const digitRegExp = /\d/;
             if (!digitRegExp.test(data)) return message;
+        },
+        minLength: (data, { message, value }) => {
+            if (data.length < value) return message;
         }
     };
 
