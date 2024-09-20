@@ -7,6 +7,10 @@ export function validator(data, config) {
         isEmail: (propData, message) => {
             const emailRegExp = /^\S+@\S+\.\S+$/g;
             if (!emailRegExp.test(propData)) return message;
+        },
+        hasUpperCase: (propData, message) => {
+            const uppercaseRegExp = /[A-Z]/;
+            if (!uppercaseRegExp.test(propData)) return message;
         }
     };
 

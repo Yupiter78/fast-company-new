@@ -24,6 +24,9 @@ const Login = () => {
         password: {
             isRequired: {
                 message: "Password is required"
+            },
+            hasUpperCase: {
+                message: "Password must contain at least one uppercase letter"
             }
         }
     };
