@@ -27,6 +27,9 @@ const Login = () => {
             },
             hasUpperCase: {
                 message: "Password must contain at least one uppercase letter"
+            },
+            hasDigit: {
+                message: "Password must contain at least one digit"
             }
         }
     };
