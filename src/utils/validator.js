@@ -16,6 +16,10 @@ export function validator(data, config) {
             const digitRegExp = /\d/;
             if (!digitRegExp.test(data)) return message;
         },
+        hasSpecialChar: (data, { message }) => {
+            const specialCharRegExp = /[.,?!@#$%^&*]/;
+            if (!specialCharRegExp.test(data)) return message;
+        },
         minLength: (data, { message, value }) => {
             if (data.length < value) return message;
         }
