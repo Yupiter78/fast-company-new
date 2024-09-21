@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../components/TextField";
 import { validator } from "../utils/validator";
+import _ from "lodash";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -42,13 +43,17 @@ const Login = () => {
         }
     };
 
+    const isValid = _.isEmpty(errors);
+
     const validate = () => {
         const errors = validator(formData, validateConfig);
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("click button");
         const isValid = validate();
         if (!isValid) return;
         console.log("formData: ", formData);
@@ -71,7 +76,13 @@ const Login = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
-            <button type="submit">Login</button>
+            <button
+                type="submit"
+                className={`btn btn-${isValid ? "primary" : "secondary"}`}
+                disabled={!isValid}
+            >
+                Login
+            </button>
         </form>
     );
 };
