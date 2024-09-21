@@ -60,30 +60,39 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                label="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={errors.email}
-            />
-            <TextField
-                label="Password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                error={errors.password}
-            />
-            <button
-                type="submit"
-                className={`btn btn-${isValid ? "primary" : "secondary"}`}
-                disabled={!isValid}
-            >
-                Login
-            </button>
-        </form>
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    <h3 className="mb-4">Login</h3>
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        <TextField
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            error={errors.password}
+                        />
+                        <button
+                            type="submit"
+                            className={`btn btn-${
+                                isValid ? "primary" : "secondary"
+                            } d-flex justify-content-center w-75 mx-auto`}
+                            disabled={!isValid}
+                        >
+                            Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 
