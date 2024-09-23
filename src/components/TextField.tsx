@@ -9,14 +9,14 @@ interface TextFieldProps {
     error?: string;
 }
 
-const TextField: React.FC<TextFieldProps> = ({
+const TextField: React.FC<TextFieldProps> = React.memo(function TextField({
     label,
     name,
     type = "text",
     value,
     onChange,
     error
-}) => {
+}) {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => setShowPassword((prev) => !prev);
     const getInputClasses = (error?: string) =>
@@ -51,6 +51,6 @@ const TextField: React.FC<TextFieldProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default TextField;
