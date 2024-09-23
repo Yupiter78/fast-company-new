@@ -9,7 +9,7 @@ const TextField = ({ label, name, type, value, onChange, error }) => {
     return (
         <div className="mb-4">
             <label htmlFor={name}>{label}</label>
-            <div className="input-group">
+            <div className="input-group has-validation">
                 <input
                     type={type === "password" && showPassword ? "text" : type}
                     id={name}
@@ -24,7 +24,11 @@ const TextField = ({ label, name, type, value, onChange, error }) => {
                         type="button"
                         onClick={toggleShowPassword}
                     >
-                        {showPassword ? "Hide" : "Show"}
+                        <i
+                            className={`bi bi-eye${
+                                showPassword ? "-slash" : ""
+                            }`}
+                        ></i>
                     </button>
                 )}
 
