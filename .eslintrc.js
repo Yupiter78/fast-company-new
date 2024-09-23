@@ -3,23 +3,21 @@ module.exports = {
         browser: true,
         es2021: true
     },
-    extends: ["standard", "plugin:react/recommended"],
-    overrides: [
-        {
-            env: {
-                node: true
-            },
-            files: [".eslintrc.{js,cjs}"],
-            parserOptions: {
-                sourceType: "script"
-            }
-        }
+    extends: [
+        "standard",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/jsx-runtime"
     ],
+    parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: "latest",
-        sourceType: "module"
+        sourceType: "module",
+        ecmaFeatures: {
+            jsx: true
+        }
     },
-    plugins: ["react"],
+    plugins: ["react", "@typescript-eslint"],
     rules: {
         semi: [2, "always"],
         indent: [0, 4],
@@ -38,6 +36,21 @@ module.exports = {
                 allowTemplateLiterals: true
             }
         ],
-        "multiline-ternary": [0]
+        "multiline-ternary": [0],
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                argsIgnorePattern: "^_",
+                varsIgnorePattern: "^React$"
+            }
+        ],
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "react/react-in-jsx-scope": "off"
+    },
+    settings: {
+        react: {
+            version: "detect"
+        }
     }
 };

@@ -1,10 +1,25 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
-const TextField = ({ label, name, type, value, onChange, error }) => {
+interface TextFieldProps {
+    label: string;
+    name: string;
+    type?: string;
+    value: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    error?: string;
+}
+
+const TextField: React.FC<TextFieldProps> = ({
+    label,
+    name,
+    type = "text",
+    value,
+    onChange,
+    error
+}) => {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => setShowPassword((prev) => !prev);
-    const getInputClasses = (error) =>
+    const getInputClasses = (error?: string) =>
         `form-control ${error ? "is-invalid" : ""}`;
     return (
         <div className="mb-4">
@@ -36,17 +51,6 @@ const TextField = ({ label, name, type, value, onChange, error }) => {
             </div>
         </div>
     );
-};
-
-TextField.defaultProps = { type: "text" };
-
-TextField.propTypes = {
-    label: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    error: PropTypes.string
 };
 
 export default TextField;
