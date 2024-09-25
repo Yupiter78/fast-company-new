@@ -14,7 +14,7 @@ interface UsersTableOwnProps {
     onDelete: (id: string) => void;
 }
 
-interface TableRestProps {
+export interface TableRestProps {
     onSort: (item: { iter: string; order: "asc" | "desc" }) => void;
     selectedSort: { iter: string; order: "asc" | "desc" };
 }
