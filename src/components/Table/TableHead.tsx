@@ -1,9 +1,24 @@
 import React, { useCallback } from "react";
-import PropTypes from "prop-types";
+import { Columns } from "../../types/types";
 
-const TableHead = ({ onSort, columns, selectedSort }) => {
+interface SelectedSort {
+    iter: string;
+    order: "asc" | "desc";
+}
+
+interface TableHeadProps {
+    onSort: (sort: SelectedSort) => void;
+    columns: Columns;
+    selectedSort: SelectedSort;
+}
+
+const TableHead: React.FC<TableHeadProps> = ({
+    onSort,
+    columns,
+    selectedSort
+}) => {
     const handleSort = useCallback(
-        (iter) => {
+        (iter: string) => {
             iter === selectedSort.iter
                 ? onSort({
                       ...selectedSort,
@@ -17,7 +32,7 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
         [onSort, selectedSort]
     );
 
-    const renderSortArrow = (selectedSort, iter) => {
+    const renderSortArrow = (selectedSort: SelectedSort, iter?: string) => {
         return (
             iter === selectedSort.iter && (
                 <i
@@ -47,12 +62,6 @@ const TableHead = ({ onSort, columns, selectedSort }) => {
             </tr>
         </thead>
     );
-};
-
-TableHead.propTypes = {
-    onSort: PropTypes.func.isRequired,
-    columns: PropTypes.object.isRequired,
-    selectedSort: PropTypes.object.isRequired
 };
 
 export default TableHead;
