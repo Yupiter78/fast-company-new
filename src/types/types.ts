@@ -23,7 +23,7 @@ export interface Column {
     _id: number;
     name: string;
     iter?: string;
-    component?: (props: any) => JSX.Element;
+    component?: (props: User) => JSX.Element;
 }
 
 export interface Columns {

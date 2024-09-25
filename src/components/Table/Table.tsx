@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
-import { Columns } from "../../types/types";
+import { User, Columns } from "../../types/types";
 import { TableRestProps } from "../UsersTable";
 
 interface TableProps extends TableRestProps {
     columns: Columns;
-    data: Array<any>;
+    data: User[];
     startIndex: number;
     children?: ReactNode;
 }
