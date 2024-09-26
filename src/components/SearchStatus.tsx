@@ -1,8 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 
-const SearchStatus = ({ length }) => {
-    const handlePhrases = (length) => {
+interface SearchStatusProps {
+    length: number;
+}
+
+const SearchStatus: FC<SearchStatusProps> = ({ length }) => {
+    const handlePhrases = (length: number) => {
         const numberAsString = length.toString();
         const lastTwoDigits = parseInt(numberAsString.slice(-2));
 
@@ -33,10 +36,6 @@ const SearchStatus = ({ length }) => {
             <span className={`badge m-5 bg-${color}`}>{phrase}</span>
         </h2>
     );
-};
-
-SearchStatus.propTypes = {
-    length: PropTypes.number
 };
 
 export default SearchStatus;
