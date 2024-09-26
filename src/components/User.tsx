@@ -1,25 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
 import api from "../api";
 import QualitiesList from "./QualitiesList";
+import { User as IUserProps } from "../types/types";
 
-const User = ({ id }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+interface UserProps {
+    id: string;
+}
+
+const User: FC<UserProps> = ({ id }) => {
+    const [user, setUser] = useState<IUserProps | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
     const history = useHistory();
 
     const handleReturnAllUsers = useCallback(() => {
         history.push("/users");
     }, []);
     useEffect(() => {
-        const fetchData = async (isMounted) => {
+        const fetchData = async (isMounted: boolean) => {
             try {
                 const userData = await api.users.getUserById(id);
                 isMounted && setUser(userData);
-            } catch (e) {
-                setError(e);
+            } catch (error) {
+                setError(error as Error);
             } finally {
                 isMounted && setLoading(false);
             }
@@ -84,10 +88,6 @@ const User = ({ id }) => {
     ) : (
         <div>Loading...</div>
     );
-};
-
-User.propTypes = {
-    id: PropTypes.string.isRequired
 };
 
 export default User;
