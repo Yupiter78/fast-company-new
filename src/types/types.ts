@@ -9,6 +9,10 @@ export interface Profession {
     name: string;
 }
 
+export interface Professions {
+    [key: string]: Profession; // Индексная сигнатура
+}
+
 export interface User {
     _id: string;
     name: string;

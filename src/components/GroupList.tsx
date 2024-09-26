@@ -1,13 +1,22 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Profession } from "../types/types";
 
-const GroupList = ({
+interface GroupListProps {
+    items: Record<string, Profession>;
+    selectedItem: Profession | null;
+    onProfessionSelect: (profession: Profession) => void;
+    onClearFilter: () => void;
+    valueProp?: string;
+    contentProp?: string;
+}
+
+const GroupList: React.FC<GroupListProps> = ({
     items,
     selectedItem,
     onProfessionSelect,
     onClearFilter,
-    valueProp,
-    contentProp
+    valueProp = "_id",
+    contentProp = "name"
 }) => {
     return (
         <>
@@ -20,7 +29,7 @@ const GroupList = ({
                 <tbody>
                     {Object.keys(items).map((key) => {
                         return (
-                            <tr key={items[key][valueProp]}>
+                            <tr key={items[key][valueProp as keyof Profession]}>
                                 <td
                                     className={`ms-2 ${
                                         selectedItem === items[key]
@@ -37,7 +46,11 @@ const GroupList = ({
                                             borderColor: "transparent"
                                         }}
                                     >
-                                        {items[key][contentProp]}
+                                        {
+                                            items[key][
+                                                contentProp as keyof Profession
+                                            ]
+                                        }
                                     </button>
                                 </td>
                             </tr>
@@ -56,20 +69,6 @@ const GroupList = ({
             </table>
         </>
     );
-};
-
-GroupList.defaultProps = {
-    valueProp: "_id",
-    contentProp: "name"
-};
-
-GroupList.propTypes = {
-    items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    selectedItem: PropTypes.object,
-    onProfessionSelect: PropTypes.func,
-    onClearFilter: PropTypes.func,
-    valueProp: PropTypes.string,
-    contentProp: PropTypes.string
 };
 
 export default GroupList;
