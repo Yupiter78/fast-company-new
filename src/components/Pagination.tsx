@@ -1,8 +1,19 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import _ from "lodash";
 
-const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
+interface PaginationProps {
+    pageSize: number;
+    totalUsers: number;
+    currentPage: number;
+    onPageChange: (page: number) => void;
+}
+
+const Pagination: FC<PaginationProps> = ({
+    pageSize,
+    totalUsers,
+    currentPage,
+    onPageChange
+}) => {
     const totalPages = Math.ceil(totalUsers / pageSize);
     const pages = _.range(1, totalPages + 1);
     return (
@@ -30,7 +41,9 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
                                         currentPage === page ? "active" : ""
                                     }`}
                                     aria-current={
-                                        currentPage === page ? "page" : null
+                                        currentPage === page
+                                            ? "page"
+                                            : undefined
                                     }
                                     style={{ cursor: "pointer" }}
                                 >
@@ -60,13 +73,6 @@ const Pagination = ({ pageSize, totalUsers, currentPage, onPageChange }) => {
             )}
         </>
     );
-};
-
-Pagination.propTypes = {
-    pageSize: PropTypes.number.isRequired,
-    totalUsers: PropTypes.number.isRequired,
-    currentPage: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired
 };
 
 export default Pagination;
