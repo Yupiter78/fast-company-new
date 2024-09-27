@@ -3,16 +3,34 @@ import TextField from "../components/TextField";
 import { validator } from "../utils/validator";
 import _ from "lodash";
 
-const Login = () => {
-    const [formData, setFormData] = useState({ email: "", password: "" });
-    const [errors, setErrors] = useState({});
-    const handleChange = useCallback(({ target: { name, value } }) => {
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    }, []);
+interface IFormData {
+    email: string;
+    password: string;
+}
+
+interface IErrors {
+    email?: string;
+    password?: string;
+}
+
+const Login: React.FC = () => {
+    const [formData, setFormData] = useState<IFormData>({
+        email: "",
+        password: ""
+    });
+    const [errors, setErrors] = useState<IErrors>({});
+
+    const handleChange = useCallback(
+        ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+            setFormData((prevState) => ({ ...prevState, [name]: value }));
+        },
+        []
+    );
 
     useEffect(() => {
         validate();
     }, [formData]);
+
     const validateConfig = {
         email: {
             isRequired: {
@@ -51,9 +69,8 @@ const Login = () => {
         return Object.keys(errors).length === 0;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("click button");
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const isValid = validate();
         if (!isValid) return;
         console.log("formData: ", formData);
