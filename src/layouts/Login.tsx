@@ -8,10 +8,7 @@ interface IFormData {
     password: string;
 }
 
-interface IErrors {
-    email?: string;
-    password?: string;
-}
+type IErrors = Partial<Record<keyof IFormData, string>>;
 
 const Login: React.FC = () => {
     const [formData, setFormData] = useState<IFormData>({
