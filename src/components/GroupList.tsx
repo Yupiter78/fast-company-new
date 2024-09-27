@@ -1,10 +1,10 @@
 import React from "react";
-import { Profession } from "../types/types";
+import { IProfession } from "../types/types";
 
 interface GroupListProps {
-    items: Record<string, Profession>;
-    selectedItem: Profession | null;
-    onProfessionSelect: (profession: Profession) => void;
+    items: Record<string, IProfession> | IProfession[];
+    selectedItem: IProfession | null;
+    onProfessionSelect: (profession: IProfession) => void;
     onClearFilter: () => void;
     valueProp?: string;
     contentProp?: string;
@@ -28,17 +28,18 @@ const GroupList: React.FC<GroupListProps> = ({
                 </thead>
                 <tbody>
                     {Object.keys(items).map((key) => {
+                        const item = Array.isArray(items)
+                            ? items[Number(key)]
+                            : items[key];
                         return (
-                            <tr key={items[key][valueProp as keyof Profession]}>
+                            <tr key={item[valueProp as keyof IProfession]}>
                                 <td
                                     className={`ms-2 ${
-                                        selectedItem === items[key]
+                                        selectedItem === item
                                             ? "table-primary"
                                             : ""
                                     }`}
-                                    onClick={() =>
-                                        onProfessionSelect(items[key])
-                                    }
+                                    onClick={() => onProfessionSelect(item)}
                                 >
                                     <button
                                         className="btn btn-sm"
@@ -46,11 +47,7 @@ const GroupList: React.FC<GroupListProps> = ({
                                             borderColor: "transparent"
                                         }}
                                     >
-                                        {
-                                            items[key][
-                                                contentProp as keyof Profession
-                                            ]
-                                        }
+                                        {item[contentProp as keyof IProfession]}
                                     </button>
                                 </td>
                             </tr>

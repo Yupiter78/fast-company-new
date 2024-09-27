@@ -2,14 +2,14 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import api from "../api";
 import QualitiesList from "./QualitiesList";
-import { User as IUserProps } from "../types/types";
+import { IUser } from "../types/types";
 
 interface UserProps {
     id: string;
 }
 
 const User: FC<UserProps> = ({ id }) => {
-    const [user, setUser] = useState<IUserProps | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
     const history = useHistory();

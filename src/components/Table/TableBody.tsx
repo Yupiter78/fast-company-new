@@ -1,31 +1,31 @@
 import React from "react";
 import _ from "lodash";
-import { User, Column, Columns } from "../../types/types";
+import { IUser, IColumn, IColumns } from "../../types/types";
 
 interface TableBodyProps {
-    data: User[];
-    columns: Columns;
+    data: IUser[];
+    columns: IColumns;
     startIndex: number;
 }
 
 const TableBody: React.FC<TableBodyProps> = ({ data, columns, startIndex }) => {
-    const renderContent = (item: User, { component, iter }: Column) => {
+    const renderContent = (item: IUser, { component, iter }: IColumn) => {
         return component && typeof component === "function"
             ? component(item)
             : component || (iter && _.get(item, iter, "no data"));
     };
     return (
         <tbody>
-            {data.map((item: User, index: number) => (
+            {data.map((item: IUser, index: number) => (
                 <tr key={item._id}>
                     <th scope="row">{index + 1 + startIndex}</th>
                     {Object.entries(columns).map(
-                        ([key, value]: [string, Column]) =>
+                        ([key, value]: [string, IColumn]) =>
                             key !== "number" && (
                                 <td key={key}>
                                     {renderContent(
-                                        item as User,
-                                        value as Column
+                                        item as IUser,
+                                        value as IColumn
                                     )}
                                 </td>
                             )

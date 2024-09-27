@@ -1,35 +1,40 @@
-export interface Quality {
+export interface IQuality {
     _id: string;
     name: string;
     color: string;
 }
 
-export interface Profession {
+export interface IProfession {
     _id: string;
     name: string;
 }
 
 export interface Professions {
-    [key: string]: Profession; // Индексная сигнатура
+    [key: string]: IProfession; // Индексная сигнатура
 }
 
-export interface User {
+export interface IUser {
     _id: string;
     name: string;
-    profession: Profession;
-    qualities: Quality[];
+    profession: IProfession;
+    qualities: IQuality[];
     completedMeetings: number;
     rate: number;
     status: boolean;
 }
 
-export interface Column {
+export interface IColumn {
     _id: number;
     name: string;
     iter?: string;
-    component?: (props: User) => JSX.Element;
+    component?: (props: IUser) => JSX.Element;
 }
 
-export interface Columns {
-    [key: string]: Column;
+export interface IColumns {
+    [key: string]: IColumn;
+}
+
+export interface ISortBy {
+    iter: string;
+    order: "asc" | "desc";
 }

@@ -1,15 +1,10 @@
 import React, { useCallback } from "react";
-import { Columns } from "../../types/types";
-
-interface SelectedSort {
-    iter: string;
-    order: "asc" | "desc";
-}
+import { IColumns, ISortBy } from "../../types/types";
 
 interface TableHeadProps {
-    onSort: (sort: SelectedSort) => void;
-    columns: Columns;
-    selectedSort: SelectedSort;
+    onSort: (sort: ISortBy) => void;
+    columns: IColumns;
+    selectedSort: ISortBy;
 }
 
 const TableHead: React.FC<TableHeadProps> = ({
@@ -32,7 +27,7 @@ const TableHead: React.FC<TableHeadProps> = ({
         [onSort, selectedSort]
     );
 
-    const renderSortArrow = (selectedSort: SelectedSort, iter?: string) => {
+    const renderSortArrow = (selectedSort: ISortBy, iter?: string) => {
         return (
             iter === selectedSort.iter && (
                 <i

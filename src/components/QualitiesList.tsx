@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Quality from "./Quality";
-import { Quality as QualityProps } from "../types/types";
+import { IQuality as QualityProps } from "../types/types";
 
 interface QualitiesListProps {
     qualities: QualityProps[];

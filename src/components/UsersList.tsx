@@ -3,20 +3,20 @@ import _ from "lodash";
 import Pagination from "./Pagination";
 import GroupList from "./GroupList";
 import api from "../api";
-import PropTypes from "prop-types";
 import SearchStatus from "./SearchStatus";
 import UsersTable from "./UsersTable";
+import { IUser, IProfession, ISortBy } from "../types/types";
 
-const UsersList = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [users, setUsers] = useState(null);
-    const [professions, setProfessions] = useState(null);
-    const [selectedProf, setSelectedProf] = useState(null);
-    const [sortBy, setSortBy] = useState({
+const UsersList: React.FC = () => {
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [users, setUsers] = useState<IUser[] | null>(null);
+    const [professions, setProfessions] = useState<IProfession[] | null>(null);
+    const [selectedProf, setSelectedProf] = useState<IProfession | null>(null);
+    const [sortBy, setSortBy] = useState<ISortBy>({
         iter: "name",
         order: "asc"
     });
-    const [isMounted, setIsMounted] = useState(true);
+    const [isMounted, setIsMounted] = useState<boolean>(true);
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
@@ -52,25 +52,29 @@ const UsersList = () => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    const handleDelete = (userId) => {
+    const handleDelete = (userId: string) => {
         setUsers((prevUsers) =>
-            prevUsers.filter((user) => user._id !== userId)
+            prevUsers ? prevUsers.filter((user) => user._id !== userId) : null
         );
     };
 
-    const handleToggleBookmark = (userId) => {
+    const handleToggleBookmark = (userId: string) => {
         setUsers((prevUsers) =>
-            prevUsers.map((user) =>
-                user._id === userId ? { ...user, status: !user.status } : user
-            )
+            prevUsers
+                ? prevUsers.map((user) =>
+                      user._id === userId
+                          ? { ...user, status: !user.status }
+                          : user
+                  )
+                : null
         );
     };
 
-    const handlePageChange = (numberPage) => {
+    const handlePageChange = (numberPage: number) => {
         setCurrentPage(numberPage);
     };
 
-    const handleProfessionSelect = (profObj) => {
+    const handleProfessionSelect = (profObj: IProfession) => {
         setSelectedProf(profObj);
     };
 
@@ -78,9 +82,10 @@ const UsersList = () => {
         setSelectedProf(null);
     };
 
-    const handleSort = (item) => {
+    const handleSort = (item: ISortBy) => {
         setSortBy(item);
     };
+
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter(({ profession }) =>
@@ -138,12 +143,7 @@ const UsersList = () => {
             </>
         );
     }
-    return "loading...";
-};
-
-UsersList.propTypes = {
-    users: PropTypes.array,
-    onProfessionSelect: PropTypes.func
+    return <div>loading...</div>;
 };
 
 export default UsersList;
