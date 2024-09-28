@@ -38,3 +38,8 @@ export interface ISortBy {
     iter: string;
     order: "asc" | "desc";
 }
+
+export interface IFormData {
+    email: string;
+    password: string;
+}

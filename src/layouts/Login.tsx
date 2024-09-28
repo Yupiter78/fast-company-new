@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../components/TextField";
 import { validator } from "../utils/validator";
 import _ from "lodash";
-
-interface IFormData {
-    email: string;
-    password: string;
-}
+import { IFormData } from "../types/types";
 
 type IErrors = Partial<Record<keyof IFormData, string>>;
 
