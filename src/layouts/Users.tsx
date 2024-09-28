@@ -1,10 +1,14 @@
-import React from "react";
+import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import User from "../components/User";
 import UsersList from "../components/UsersList";
 
-const Users = () => {
-    const { userId } = useParams();
+interface Params {
+    userId?: string;
+}
+
+const Users: FC = () => {
+    const { userId } = useParams<Params>();
     return userId ? <User id={userId} /> : <UsersList />;
 };
 
