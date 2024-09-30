@@ -1,4 +1,6 @@
-export const professionsObject = {
+import { IProfession } from "../../types/types";
+
+export const professionsObject: Record<string, IProfession> = {
     doctor: {
         _id: "67rdca3eeb7f6fgeed471818",
         name: "Доктор"
@@ -25,7 +27,7 @@ export const professionsObject = {
     }
 };
 
-export const professions = [
+export const professions: IProfession[] = [
     {
         _id: "67rdca3eeb7f6fgeed471818",
         name: "Доктор"
@@ -52,7 +54,7 @@ export const professions = [
     }
 ];
 
-const fetchAll = () => {
+const fetchAll = (): Promise<IProfession[]> => {
     return new Promise((resolve) => {
         setTimeout(() => resolve(professions), 2000);
     });
