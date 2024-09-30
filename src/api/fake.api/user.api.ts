@@ -1,6 +1,7 @@
 import { professionsObject as professions } from "./professions";
+import { IUser, IQuality } from "../../types/types";
 
-const qualities = {
+const qualities: Record<string, IQuality> = {
     tedious: {
         _id: "67rdca3eeb7f6fgeed471198",
         name: "Нудила",
@@ -33,7 +34,7 @@ const qualities = {
     }
 };
 
-const users = [
+const users: IUser[] = [
     {
         _id: "67rdca3eeb7f6fgeed471815",
         name: "Джон Дориан",
@@ -144,15 +145,18 @@ const users = [
     }
 ];
 
-function fetchAll() {
+function fetchAll(): Promise<IUser[]> {
     return new Promise((resolve) => {
         setTimeout(() => resolve(users), 2000);
     });
 }
 
-function getUserById(id) {
+function getUserById(id: string): Promise<IUser | null> {
     return new Promise((resolve) => {
-        setTimeout(() => resolve(users.find((user) => user._id === id)), 1000);
+        setTimeout(
+            () => resolve(users.find((user) => user._id === id) ?? null),
+            1000
+        );
     });
 }
 
