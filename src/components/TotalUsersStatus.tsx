@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 
-interface SearchStatusProps {
+interface TotalUsersProps {
     length: number;
 }
 
-const SearchStatus: FC<SearchStatusProps> = ({ length }) => {
+const TotalUsersStatus: FC<TotalUsersProps> = ({ length }) => {
     const handlePhrases = (length: number) => {
         const numberAsString = length.toString();
         const lastTwoDigits = parseInt(numberAsString.slice(-2));
@@ -38,4 +38,4 @@ const SearchStatus: FC<SearchStatusProps> = ({ length }) => {
     );
 };
 
-export default SearchStatus;
+export default TotalUsersStatus;

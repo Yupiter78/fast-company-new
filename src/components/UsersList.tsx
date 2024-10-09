@@ -3,9 +3,10 @@ import _ from "lodash";
 import Pagination from "./Pagination";
 import GroupList from "./GroupList";
 import api from "../api";
-import SearchStatus from "./SearchStatus";
+import TotalUsersStatus from "./TotalUsersStatus";
 import UsersTable from "./UsersTable";
 import { IUser, IProfession, ISortBy } from "../types/types";
+import SearchField from "./SearchField";
 
 const UsersList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -17,6 +18,8 @@ const UsersList: React.FC = () => {
         order: "asc"
     });
     const [isMounted, setIsMounted] = useState<boolean>(true);
+    const [searchData, setSearchData] = useState<string>("");
+
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
@@ -28,9 +31,9 @@ const UsersList: React.FC = () => {
                 if (isMounted) {
                     setUsers(data);
                 }
-            } catch (e) {
+            } catch (error) {
                 if (isMounted) {
-                    console.log("Error fetching users: ", e);
+                    console.log("Error fetching users: ", error);
                 }
             }
         };
@@ -76,6 +79,7 @@ const UsersList: React.FC = () => {
 
     const handleProfessionSelect = (profObj: IProfession) => {
         setSelectedProf(profObj);
+        setSearchData("");
     };
 
     const handleClearFilter = () => {
@@ -86,10 +90,21 @@ const UsersList: React.FC = () => {
         setSortBy(item);
     };
 
+    const handleSearchChange = ({
+        target: { value }
+    }: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchData(value);
+        handleClearFilter();
+    };
+
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter(({ profession }) =>
                   _.isEqual(profession, selectedProf)
+              )
+            : searchData
+            ? users.filter((user) =>
+                  user.name.toLowerCase().includes(searchData.toLowerCase())
               )
             : users;
 
@@ -104,7 +119,18 @@ const UsersList: React.FC = () => {
         return (
             <>
                 <div className="d-flex justify-content-center">
-                    <SearchStatus length={count} />
+                    <TotalUsersStatus length={count} />
+                </div>
+
+                <div className="row justify-content-center mb-4">
+                    <div className="col-10">
+                        <SearchField
+                            name="search"
+                            type="search"
+                            value={searchData}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
                 </div>
 
                 <div className="row justify-content-center">
