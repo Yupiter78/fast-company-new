@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import _ from "lodash";
 import Pagination from "./Pagination";
 import GroupList from "./GroupList";
@@ -10,111 +10,124 @@ import SearchField from "./SearchField";
 
 const UsersList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [users, setUsers] = useState<IUser[] | null>(null);
-    const [professions, setProfessions] = useState<IProfession[] | null>(null);
+    const [users, setUsers] = useState<IUser[]>([]);
+    const [professions, setProfessions] = useState<IProfession[]>([]);
     const [selectedProf, setSelectedProf] = useState<IProfession | null>(null);
     const [sortBy, setSortBy] = useState<ISortBy>({
         iter: "name",
         order: "asc"
     });
-    const [isMounted, setIsMounted] = useState<boolean>(true);
     const [searchData, setSearchData] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
 
     const PAGE_SIZE = 4;
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = PAGE_SIZE * currentPage;
 
     useEffect(() => {
-        const fetchData = async () => {
+        let isMounted = true;
+        const fetchUsers = async () => {
             try {
-                const data = await api.users.fetchAll();
+                const users = await api.users.fetchAll();
                 if (isMounted) {
-                    setUsers(data);
+                    setUsers(users);
                 }
             } catch (error) {
                 if (isMounted) {
-                    console.log("Error fetching users: ", error);
+                    setError("Ошибка при загрузке пользователей.");
+                    console.error("Error fetching users: ", error);
                 }
             }
         };
 
-        fetchData();
+        const fetchProfessions = async () => {
+            try {
+                const professions = await api.professions.fetchAll();
+                if (isMounted) setProfessions(professions);
+            } catch (error) {
+                if (isMounted) {
+                    setError("Ошибка при загрузка профессий.");
+                    console.error("Error fetching professions: ", error);
+                }
+            }
+        };
+
+        fetchUsers();
+        fetchProfessions();
 
         return () => {
-            setIsMounted(false);
+            isMounted = false;
         };
-    }, []);
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => {
-            setProfessions(data);
-        });
     }, []);
 
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    const handleDelete = (userId: string) => {
+    const handleDelete = useCallback((userId: string) => {
         setUsers((prevUsers) =>
-            prevUsers ? prevUsers.filter((user) => user._id !== userId) : null
+            prevUsers.filter((user) => user._id !== userId)
         );
-    };
+    }, []);
 
-    const handleToggleBookmark = (userId: string) => {
+    const handleToggleBookmark = useCallback((userId: string) => {
         setUsers((prevUsers) =>
-            prevUsers
-                ? prevUsers.map((user) =>
-                      user._id === userId
-                          ? { ...user, status: !user.status }
-                          : user
-                  )
-                : null
+            prevUsers.map((user) =>
+                user._id === userId ? { ...user, status: !user.status } : user
+            )
         );
-    };
+    }, []);
 
-    const handlePageChange = (numberPage: number) => {
+    const handlePageChange = useCallback((numberPage: number) => {
         setCurrentPage(numberPage);
-    };
+    }, []);
 
-    const handleProfessionSelect = (profObj: IProfession) => {
+    const handleProfessionSelect = useCallback((profObj: IProfession) => {
         setSelectedProf(profObj);
         setSearchData("");
-    };
+    }, []);
 
-    const handleClearFilter = () => {
+    const handleClearFilter = useCallback(() => {
         setSelectedProf(null);
-    };
+    }, []);
 
-    const handleSort = (item: ISortBy) => {
+    const handleSort = useCallback((item: ISortBy) => {
         setSortBy(item);
-    };
+    }, []);
 
-    const handleSearchChange = ({
-        target: { value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchData(value);
-        handleClearFilter();
-    };
+    const handleSearchChange = useCallback(
+        ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchData(value);
+            handleClearFilter();
+        },
+        []
+    );
 
-    if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter(({ profession }) =>
-                  _.isEqual(profession, selectedProf)
-              )
-            : searchData
-            ? users.filter((user) =>
-                  user.name.toLowerCase().includes(searchData.toLowerCase())
-              )
-            : users;
+    if (error) {
+        return <div>{error}</div>;
+    }
 
-        const sortedUsers = _.orderBy(
-            filteredUsers,
-            [sortBy.iter],
-            [sortBy.order]
-        );
-        const usersSlice = sortedUsers.slice(startIndex, endIndex);
-        const count = filteredUsers.length;
+    if (users.length > 0) {
+        const filteredUsers = () => {
+            let result = users;
+            if (selectedProf) {
+                result = users.filter(({ profession }) =>
+                    _.isEqual(profession, selectedProf)
+                );
+            }
+            if (searchData) {
+                result = users.filter(({ name }) =>
+                    name.toLowerCase().includes(searchData.toLowerCase())
+                );
+            }
+
+            return result;
+        };
+
+        const sortedUsers = () =>
+            _.orderBy(filteredUsers(), [sortBy.iter], [sortBy.order]);
+        const usersSlice = sortedUsers().slice(startIndex, endIndex);
+        const count = filteredUsers().length;
 
         return (
             <>
@@ -134,7 +147,7 @@ const UsersList: React.FC = () => {
                 </div>
 
                 <div className="row justify-content-center">
-                    {professions && (
+                    {professions.length > 0 && (
                         <div className="col-1 ms-2">
                             <GroupList
                                 items={professions}
