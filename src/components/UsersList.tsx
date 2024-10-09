@@ -107,82 +107,79 @@ const UsersList: React.FC = () => {
         return <div>{error}</div>;
     }
 
-    if (users.length > 0) {
-        const filteredUsers = () => {
-            let result = users;
-            if (selectedProf) {
-                result = users.filter(({ profession }) =>
-                    _.isEqual(profession, selectedProf)
-                );
-            }
-            if (searchData) {
-                result = users.filter(({ name }) =>
-                    name.toLowerCase().includes(searchData.toLowerCase())
-                );
-            }
+    if (users.length === 0) {
+        return <div>loading...</div>;
+    }
 
-            return result;
-        };
+    const filteredUsers = () => {
+        return users.filter(({ profession, name }) => {
+            const matchesProfession = selectedProf
+                ? _.isEqual(profession, selectedProf)
+                : true;
+            const matchesSearch = name
+                .toLowerCase()
+                .includes(searchData.toLowerCase());
+            return matchesProfession && matchesSearch;
+        });
+    };
 
-        const sortedUsers = () =>
-            _.orderBy(filteredUsers(), [sortBy.iter], [sortBy.order]);
-        const usersSlice = sortedUsers().slice(startIndex, endIndex);
-        const count = filteredUsers().length;
+    const sortedUsers = () =>
+        _.orderBy(filteredUsers(), [sortBy.iter], [sortBy.order]);
+    const usersSlice = sortedUsers().slice(startIndex, endIndex);
+    const count = filteredUsers().length;
 
-        return (
-            <>
-                <div className="d-flex justify-content-center">
-                    <TotalUsersStatus length={count} />
-                </div>
+    return (
+        <>
+            <div className="d-flex justify-content-center">
+                <TotalUsersStatus length={count} />
+            </div>
 
-                <div className="row justify-content-center mb-4">
-                    <div className="col-10">
-                        <SearchField
-                            name="search"
-                            type="search"
-                            value={searchData}
-                            onChange={handleSearchChange}
-                        />
-                    </div>
-                </div>
-
-                <div className="row justify-content-center">
-                    {professions.length > 0 && (
-                        <div className="col-1 ms-2">
-                            <GroupList
-                                items={professions}
-                                selectedItem={selectedProf}
-                                onProfessionSelect={handleProfessionSelect}
-                                onClearFilter={handleClearFilter}
-                            />
-                        </div>
-                    )}
-                    {count > 0 && (
-                        <div className="col-9 me-2">
-                            <UsersTable
-                                users={usersSlice}
-                                startIndex={startIndex}
-                                onSort={handleSort}
-                                selectedSort={sortBy}
-                                onDelete={handleDelete}
-                                onToggleBookmark={handleToggleBookmark}
-                            />
-                        </div>
-                    )}
-                </div>
-
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        pageSize={PAGE_SIZE}
-                        totalUsers={count}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
+            <div className="row justify-content-center mb-4">
+                <div className="col-10">
+                    <SearchField
+                        name="search"
+                        type="search"
+                        value={searchData}
+                        onChange={handleSearchChange}
                     />
                 </div>
-            </>
-        );
-    }
-    return <div>loading...</div>;
+            </div>
+
+            <div className="row justify-content-center">
+                {professions.length > 0 && (
+                    <div className="col-1 ms-2">
+                        <GroupList
+                            items={professions}
+                            selectedItem={selectedProf}
+                            onProfessionSelect={handleProfessionSelect}
+                            onClearFilter={handleClearFilter}
+                        />
+                    </div>
+                )}
+                {count > 0 && (
+                    <div className="col-9 me-2">
+                        <UsersTable
+                            users={usersSlice}
+                            startIndex={startIndex}
+                            onSort={handleSort}
+                            selectedSort={sortBy}
+                            onDelete={handleDelete}
+                            onToggleBookmark={handleToggleBookmark}
+                        />
+                    </div>
+                )}
+            </div>
+
+            <div className="d-flex justify-content-center">
+                <Pagination
+                    pageSize={PAGE_SIZE}
+                    totalUsers={count}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            </div>
+        </>
+    );
 };
 
 export default UsersList;
